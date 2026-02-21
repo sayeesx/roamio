@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -54,7 +54,7 @@ const inputCls = 'w-full rounded-xl border border-[#E8E4DF] px-4 py-3 text-sm bg
 const labelCls = 'block text-sm font-medium text-[#1C1C1E] mb-1.5'
 const errorCls = 'text-xs text-red-500 mt-1'
 
-export default function IntakeStartPage() {
+function IntakeForm() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [step, setStep] = useState(1)
@@ -123,8 +123,8 @@ export default function IntakeStartPage() {
                             {Array.from({ length: totalSteps - 1 }).map((_, i) => (
                                 <div key={i} className="flex items-center gap-2">
                                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${step > i + 1 ? 'gradient-primary text-white' :
-                                            step === i + 1 ? 'bg-[#0D6E6E] text-white ring-4 ring-[#0D6E6E]/20' :
-                                                'bg-[#E8E4DF] text-[#6B7280]'
+                                        step === i + 1 ? 'bg-[#0D6E6E] text-white ring-4 ring-[#0D6E6E]/20' :
+                                            'bg-[#E8E4DF] text-[#6B7280]'
                                         }`}>
                                         {step > i + 1 ? <CheckCircle size={16} /> : i + 1}
                                     </div>
@@ -152,8 +152,8 @@ export default function IntakeStartPage() {
                                                 onChange={() => setPurpose(opt.value as Purpose)}
                                             />
                                             <div className={`p-5 rounded-xl border-2 transition-all hover:border-[#0D6E6E]/50 ${purpose === opt.value
-                                                    ? 'border-[#0D6E6E] bg-[#0D6E6E]/5'
-                                                    : 'border-[#E8E4DF] bg-white'
+                                                ? 'border-[#0D6E6E] bg-[#0D6E6E]/5'
+                                                : 'border-[#E8E4DF] bg-white'
                                                 }`}>
                                                 <div className={`mb-3 ${purpose === opt.value ? 'text-[#0D6E6E]' : 'text-[#6B7280]'}`}>
                                                     {opt.icon}
@@ -391,5 +391,24 @@ export default function IntakeStartPage() {
                 </div>
             </div>
         </div>
+    )
+}
+
+// The page export wraps IntakeForm in Suspense because useSearchParams()
+// requires a Suspense boundary during static prerendering on Vercel.
+export default function IntakeStartPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen bg-[#F9F7F4] flex items-center justify-center">
+                    <div className="flex flex-col items-center gap-3">
+                        <Loader2 size={32} className="animate-spin text-[#0D6E6E]" />
+                        <p className="text-sm text-[#6B7280]">Loading...</p>
+                    </div>
+                </div>
+            }
+        >
+            <IntakeForm />
+        </Suspense>
     )
 }

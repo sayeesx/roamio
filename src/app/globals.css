@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+/* ——— Roamio Design Tokens ——— */
+@theme inline {
+  /* Colors */
+  --color-primary: #0D6E6E;
+  --color-primary-light: #1A8585;
+  --color-primary-dark: #095555;
+  --color-accent: #C9A84C;
+  --color-accent-light: #DFB96A;
+  --color-background: #F9F7F4;
+  --color-surface: #FFFFFF;
+  --color-text: #1C1C1E;
+  --color-text-muted: #6B7280;
+  --color-border: #E8E4DF;
+
+  /* Fonts */
+  --font-sans: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  --font-heading: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+
+  /* Border radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+}
+
+/* ——— Base Styles ——— */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ——— Scrollbar ——— */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 3px;
+}
+
+/* ——— Typography ——— */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+/* ——— Focus ——— */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ——— Glass surface ——— */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ——— Gradient utilities ——— */
+.gradient-primary {
+  background: linear-gradient(135deg, #0D6E6E 0%, #095555 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, #C9A84C 0%, #a8872d 100%);
+}
+
+.gradient-hero {
+  background: linear-gradient(160deg, #0a4a4a 0%, #0D6E6E 40%, #1A8585 70%, #0f5a5a 100%);
+}
+
+/* ——— RTL Support ——— */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* ——— Animation keyframes ——— */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #e8e4df 25%, #f0ece8 50%, #e8e4df 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}

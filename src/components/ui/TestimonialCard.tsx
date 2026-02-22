@@ -15,8 +15,8 @@ export function TestimonialCard({ quote, author, role, rating }: TestimonialCard
             className="group relative flex items-center justify-center rounded-3xl overflow-hidden border border-[#cccccc] bg-white"
             style={{
                 width: '100%',
-                minHeight: '360px',
-                padding: '32px',
+                minHeight: 'clamp(280px, 50vw, 360px)',
+                padding: 'clamp(20px, 4vw, 32px)',
                 lineHeight: '1.6',
                 transition: 'all 0.48s cubic-bezier(0.23, 1, 0.32, 1)',
             }}

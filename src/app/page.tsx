@@ -103,7 +103,7 @@ export default function HomePage() {
               <span className="text-[#0D6E6E] text-xs sm:text-sm font-semibold">Kerala&apos;s Premier AI Concierge</span>
             </div>
 
-            <h1 className="animate-fade-in-up-delay-1 text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-[#1C1C1E] leading-[1.1] mb-5">
+            <h1 className="animate-fade-in-up-delay-1 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-[#1C1C1E] leading-[1.1] mb-5">
               Travel Kerala,{' '}
               <span className="text-[#0D6E6E]">effortlessly.</span>
             </h1>
@@ -199,7 +199,7 @@ export default function HomePage() {
           title="Made for Every Kind of Kerala Visitor"
           subtitle="Whether you are returning home, exploring for the first time, or planning something meaningful, we make your time in Kerala smooth and well organised."
         />
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
           {audiences.map((item) => (
             <FeatureCard key={item.title} icon={<>{item.icon}{item.iconLg}</>} title={item.title} description={item.description} />
           ))}
@@ -288,7 +288,7 @@ export default function HomePage() {
           title="What Our Visitors Say"
           subtitle="Real experiences from people we've guided through Kerala."
         />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10">
           {testimonials.map((t) => (
             <TestimonialCard
               key={t.author}

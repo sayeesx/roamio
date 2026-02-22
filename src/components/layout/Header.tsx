@@ -163,7 +163,7 @@ export default function Header() {
         return (
             <header
                 className={cn(
-                    'fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E8E4DF] shadow-sm',
+                    'fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/30 shadow-sm',
                     'transition-all duration-300 ease-in-out',
                     mobileVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0',
                 )}
@@ -180,7 +180,7 @@ export default function Header() {
                 </div>
 
                 {mobileOpen && (
-                    <div className="bg-white border-t border-[#E8E4DF] shadow-lg px-4 pb-5 pt-3 flex flex-col gap-1 animate-fade-in">
+                    <div className="bg-white/70 backdrop-blur-xl border-t border-white/30 shadow-lg px-4 pb-5 pt-3 flex flex-col gap-1 animate-fade-in">
                         {navLinks.map((item) => (
                             <Link
                                 key={item.link}

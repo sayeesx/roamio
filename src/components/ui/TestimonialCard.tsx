@@ -12,10 +12,9 @@ interface TestimonialCardProps {
 export function TestimonialCard({ quote, author, role, rating }: TestimonialCardProps) {
     return (
         <div
-            className="group relative flex items-center justify-center rounded-3xl overflow-hidden border border-[#cccccc] bg-white"
+            className="group relative flex items-center justify-center rounded-3xl overflow-hidden border border-[#cccccc] bg-white min-h-[200px] sm:min-h-[300px] md:min-h-[360px]"
             style={{
                 width: '100%',
-                minHeight: 'clamp(280px, 50vw, 360px)',
                 padding: 'clamp(20px, 4vw, 32px)',
                 lineHeight: '1.6',
                 transition: 'all 0.48s cubic-bezier(0.23, 1, 0.32, 1)',

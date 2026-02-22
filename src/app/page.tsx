@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, CheckCircle, Users, Heart, Plane, Star, Shield, Lock, MapPin, Car, FileText, Hotel, Stethoscope } from 'lucide-react'
 import { SectionContainer, SectionHeading } from '@/components/ui/SectionContainer'
 import { CTAButton } from '@/components/ui/CTAButton'
@@ -52,10 +53,30 @@ const audiences = [
 ]
 
 const destinations = [
-  { name: 'Munnar', tag: 'Tea Hills & Mist', color: '#1a5c3a' },
-  { name: 'Alappuzha', tag: 'Backwaters & Houseboats', color: '#1a3a5c' },
-  { name: 'Kochi', tag: 'Heritage & Cosmopolitan', color: '#3a1a5c' },
-  { name: 'Wayanad', tag: 'Forests & Tribal Culture', color: '#5c3a1a' },
+  {
+    name: 'Munnar',
+    tag: 'Tea Hills & Mist',
+    color: '#1a5c3a',
+    image: 'https://images.unsplash.com/photo-1540611025311-01df3cef54b5?auto=format&fit=crop&q=80&w=800',
+  },
+  {
+    name: 'Alappuzha',
+    tag: 'Backwaters & Houseboats',
+    color: '#1a3a5c',
+    image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800&q=80',
+  },
+  {
+    name: 'Kochi',
+    tag: 'Heritage & Cosmopolitan',
+    color: '#3a1a5c',
+    image: 'https://images.unsplash.com/photo-1593693411515-c20261bcad6e?w=800&q=80',
+  },
+  {
+    name: 'Wayanad',
+    tag: 'Forests & Tribal Culture',
+    color: '#5c3a1a',
+    image: '/wayanad.avif',
+  },
 ]
 
 const testimonials = [
@@ -212,6 +233,7 @@ export default function HomePage() {
           eyebrow="Featured Destinations"
           title="The Best of Kerala, Curated for You"
           subtitle="Beyond the tourist trail — places chosen for experience, authenticity, and access."
+          subtitleClassName="whitespace-nowrap"
         />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
           {destinations.map((dest) => (
@@ -220,12 +242,13 @@ export default function HomePage() {
               href={`/tourism#${dest.name.toLowerCase()}`}
               className="group relative h-40 sm:h-56 lg:h-72 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer"
             >
-              {/* Color block background */}
-              <div
-                className="absolute inset-0 transition-transform duration-500 group-hover:scale-110"
-                style={{
-                  background: `linear-gradient(160deg, ${dest.color} 0%, ${dest.color}cc 100%)`,
-                }}
+              {/* Real photo background */}
+              <Image
+                src={dest.image}
+                alt={dest.name}
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
               />
               {/* Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />

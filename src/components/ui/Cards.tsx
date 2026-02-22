@@ -18,10 +18,12 @@ export function FeatureCard({ icon, title, description, className, accent }: Fea
                 className,
             )}
         >
-            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl gradient-primary flex items-center justify-center mb-3 sm:mb-5 text-white group-hover:scale-110 transition-transform duration-300">
-                {icon}
+            <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-5">
+                <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl gradient-primary flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300 shrink-0">
+                    {icon}
+                </div>
+                <h3 className="text-lg sm:text-xl font-bold text-[#1C1C1E]">{title}</h3>
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-[#1C1C1E] mb-3">{title}</h3>
             <p className="text-[#6B7280] text-sm leading-relaxed">{description}</p>
         </div>
     )

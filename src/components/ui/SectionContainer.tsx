@@ -29,11 +29,12 @@ interface SectionHeadingProps {
     eyebrow?: string
     title: string
     subtitle?: string
+    subtitleClassName?: string
     centered?: boolean
     light?: boolean
 }
 
-export function SectionHeading({ eyebrow, title, subtitle, centered = true, light = false }: SectionHeadingProps) {
+export function SectionHeading({ eyebrow, title, subtitle, subtitleClassName, centered = true, light = false }: SectionHeadingProps) {
     return (
         <div className={cn('mb-8 sm:mb-14', centered && 'text-center')}>
             {eyebrow && (
@@ -52,6 +53,7 @@ export function SectionHeading({ eyebrow, title, subtitle, centered = true, ligh
                     'text-base sm:text-lg max-w-2xl leading-relaxed',
                     centered && 'mx-auto',
                     light ? 'text-white/70' : 'text-[#6B7280]',
+                    subtitleClassName,
                 )}>
                     {subtitle}
                 </p>

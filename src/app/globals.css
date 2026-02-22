@@ -97,7 +97,7 @@ h6 {
 }
 
 .gradient-hero {
-  background: linear-gradient(160deg, #0a4a4a 0%, #0D6E6E 40%, #1A8585 70%, #0f5a5a 100%);
+  background: linear-gradient(135deg, #061f1f 0%, #0a3d3d 20%, #0D6E6E 45%, #1a9999 65%, #C9A84C 90%, #a8872d 100%);
 }
 
 /* ——— RTL Support ——— */
@@ -110,10 +110,48 @@ h6 {
 }
 
 /* ——— Animation keyframes ——— */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes floatOrb {
+
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+
+  50% {
+    transform: translateY(-30px) scale(1.08);
+  }
+}
+
+@keyframes floatOrbReverse {
+
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+
+  50% {
+    transform: translateY(30px) scale(1.05);
+  }
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(32px);
   }
 
   to {
@@ -143,7 +181,35 @@ h6 {
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.6s ease forwards;
+  animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade-in-up-delay-1 {
+  animation: fadeInUp 0.7s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade-in-up-delay-2 {
+  animation: fadeInUp 0.7s 0.30s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade-in-up-delay-3 {
+  animation: fadeInUp 0.7s 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade-in-up-delay-4 {
+  animation: fadeInUp 0.7s 0.60s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-float-orb {
+  animation: floatOrb 8s ease-in-out infinite;
+}
+
+.animate-float-orb-reverse {
+  animation: floatOrbReverse 10s ease-in-out infinite;
+}
+
+.animate-float-orb-slow {
+  animation: floatOrb 14s ease-in-out infinite;
 }
 
 .animate-fade-in {

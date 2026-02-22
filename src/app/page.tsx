@@ -66,52 +66,56 @@ export default function HomePage() {
   return (
     <>
       {/* ——— Hero ——— */}
-      <section className="relative min-h-screen gradient-hero flex items-center overflow-hidden">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-white blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-[#C9A84C] blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-white blur-3xl" />
+      <section
+        className="relative min-h-screen flex items-center overflow-hidden"
+        style={{ background: 'linear-gradient(160deg, #F2EFE9 0%, #EDE8E0 60%, #E8E2D8 100%)' }}
+      >
+        {/* Subtle static blobs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-30"
+            style={{ background: 'radial-gradient(circle, #d4c9a8 0%, transparent 70%)' }} />
+          <div className="absolute bottom-0 -left-24 w-[400px] h-[400px] rounded-full opacity-20"
+            style={{ background: 'radial-gradient(circle, #b8c9c9 0%, transparent 70%)' }} />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
           <div className="max-w-3xl">
             {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
+            <div className="animate-fade-in-up inline-flex items-center gap-2 bg-[#0D6E6E]/10 border border-[#0D6E6E]/20 rounded-full px-4 py-2 mb-8">
               <span className="w-2 h-2 bg-[#C9A84C] rounded-full animate-pulse" />
-              <span className="text-white/90 text-sm font-medium">Kerala&apos;s Premier AI Concierge</span>
+              <span className="text-[#0D6E6E] text-sm font-semibold">Kerala&apos;s Premier AI Concierge</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] mb-6">
+            <h1 className="animate-fade-in-up-delay-1 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-[#1C1C1E] leading-[1.1] mb-6">
               AI-Powered{' '}
-              <span className="text-[#C9A84C]">Medical & Travel</span>{' '}
+              <span className="text-[#0D6E6E]">Medical & Travel</span>{' '}
               Concierge for Kerala
             </h1>
 
-            <p className="text-xl text-white/80 mb-10 leading-relaxed max-w-2xl">
+            <p className="animate-fade-in-up-delay-2 text-xl text-[#4B5563] mb-10 leading-relaxed max-w-2xl">
               Smart planning. Seamless coordination. Trusted execution.
               Your intelligent guide to Kerala — whether you&apos;re seeking healing, adventure, or home.
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-wrap gap-4">
+            <div className="animate-fade-in-up-delay-3 flex flex-wrap gap-4">
               <CTAButton href="/plan/start" variant="primary" size="lg" className="bg-[#C9A84C] text-white hover:bg-[#b8962f]">
                 Plan My Visit <ArrowRight size={20} />
               </CTAButton>
-              <CTAButton href="#services" variant="outline" size="lg">
+              <CTAButton href="#services" variant="outline" size="lg" className="border-[#0D6E6E] text-[#0D6E6E] hover:bg-[#0D6E6E]/5">
                 Explore Services
               </CTAButton>
             </div>
 
             {/* Trust indicators */}
-            <div className="flex flex-wrap items-center gap-6 mt-10">
+            <div className="animate-fade-in-up-delay-4 flex flex-wrap items-center gap-6 mt-10">
               {[
                 { icon: <CheckCircle size={16} />, text: 'Verified local partners' },
                 { icon: <CheckCircle size={16} />, text: 'AI-powered planning' },
                 { icon: <CheckCircle size={16} />, text: '24/7 concierge support' },
               ].map((item) => (
-                <div key={item.text} className="flex items-center gap-2 text-white/70 text-sm">
-                  <span className="text-[#C9A84C]">{item.icon}</span>
+                <div key={item.text} className="flex items-center gap-2 text-[#6B7280] text-sm">
+                  <span className="text-[#0D6E6E]">{item.icon}</span>
                   {item.text}
                 </div>
               ))}
@@ -119,11 +123,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Scroll hint */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-          <span className="text-white/40 text-xs tracking-widest uppercase">Scroll</span>
-          <div className="w-0.5 h-8 bg-gradient-to-b from-white/40 to-transparent" />
-        </div>
+
       </section>
 
       {/* ——— How Roamio Works ——— */}

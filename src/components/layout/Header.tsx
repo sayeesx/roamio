@@ -125,16 +125,16 @@ export default function Header() {
     if (isMobile) {
         return (
             <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E8E4DF] shadow-sm">
-                <div className="flex items-center justify-between px-4 py-3">
+                <div className="flex items-center justify-between px-4 py-2">
                     {/* Logo */}
                     <RoamioLogo dark />
 
                     <button
                         onClick={() => setMobileOpen(!mobileOpen)}
                         aria-label="Toggle menu"
-                        className="p-2 rounded-lg text-[#1C1C1E]"
+                        className="p-1.5 rounded-lg text-[#1C1C1E]"
                     >
-                        {mobileOpen ? <IconX size={24} /> : <IconMenu2 size={24} />}
+                        {mobileOpen ? <IconX size={20} /> : <IconMenu2 size={20} />}
                     </button>
                 </div>
 

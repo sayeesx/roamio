@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Phone, Mail, MessageCircle, Facebook, Instagram, Twitter, Linkedin, Shield } from 'lucide-react'
+import { MapPin, Phone, Mail, MessageCircle, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react'
 
 const footerLinks = {
     services: [
@@ -122,16 +122,8 @@ export default function Footer() {
 
                 {/* Bottom bar */}
                 <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/10">
-                    {/* Disclaimer */}
-                    <div className="flex items-start gap-2.5 bg-white/5 rounded-xl p-4 mb-6">
-                        <Shield size={16} className="text-[#C9A84C] mt-0.5 shrink-0" />
-                        <p className="text-xs text-white/50 leading-relaxed">
-                            <strong className="text-white/70">Medical Disclaimer:</strong> Roamio does not provide medical diagnosis, treatment advice, or direct medical services. We are a concierge coordination service. All medical decisions must be made by qualified healthcare professionals.
-                        </p>
-                    </div>
-
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <p className="text-white/40 text-xs">
+                        <p className="text-white/60 text-xs">
                             © {new Date().getFullYear()} Roamio. All rights reserved.
                         </p>
                         {/* Social */}
@@ -146,7 +138,7 @@ export default function Footer() {
                                     key={label}
                                     href={href}
                                     aria-label={label}
-                                    className="text-white/40 hover:text-[#C9A84C] transition-colors"
+                                    className="text-white/50 hover:text-[#C9A84C] transition-colors"
                                 >
                                     <Icon size={16} />
                                 </a>

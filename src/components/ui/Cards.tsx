@@ -12,17 +12,17 @@ export function FeatureCard({ icon, title, description, className, accent }: Fea
     return (
         <div
             className={cn(
-                'group relative p-8 rounded-2xl border border-[#E8E4DF] bg-white',
+                'group relative p-5 sm:p-8 rounded-2xl border border-[#E8E4DF] bg-white',
                 'hover:shadow-xl hover:-translate-y-1 transition-all duration-300',
                 accent && 'border-[#C9A84C]/30 bg-gradient-to-br from-white to-[#fdf9ef]',
                 className,
             )}
         >
-            <div className="w-14 h-14 rounded-xl gradient-primary flex items-center justify-center mb-5 text-white group-hover:scale-110 transition-transform duration-300">
+            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl gradient-primary flex items-center justify-center mb-3 sm:mb-5 text-white group-hover:scale-110 transition-transform duration-300">
                 {icon}
             </div>
-            <h3 className="text-xl font-bold text-[#1C1C1E] mb-3">{title}</h3>
-            <p className="text-[#6B7280] leading-relaxed">{description}</p>
+            <h3 className="text-lg sm:text-xl font-bold text-[#1C1C1E] mb-3">{title}</h3>
+            <p className="text-[#6B7280] text-sm leading-relaxed">{description}</p>
         </div>
     )
 }

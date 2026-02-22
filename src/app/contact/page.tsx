@@ -10,16 +10,20 @@ export const metadata: Metadata = {
 export default function ContactPage() {
     return (
         <>
-            <section className="relative pt-32 pb-20 gradient-hero overflow-hidden">
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-20 right-20 w-72 h-72 rounded-full bg-[#C9A84C] blur-3xl" />
+            <section
+                className="relative pt-24 sm:pt-28 lg:pt-32 pb-14 sm:pb-20 overflow-hidden"
+                style={{ background: 'linear-gradient(160deg, #F2EFE9 0%, #EDE8E0 60%, #E8E2D8 100%)' }}
+            >
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-30"
+                        style={{ background: 'radial-gradient(circle, #d4c9a8 0%, transparent 70%)' }} />
                 </div>
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-2xl">
-                        <h1 className="text-4xl sm:text-5xl font-bold text-white leading-[1.1] mb-4">
-                            Get in <span className="text-[#C9A84C]">Touch</span>
+                        <h1 className="text-3xl sm:text-5xl font-bold text-[#1C1C1E] leading-[1.1] mb-4">
+                            Get in <span className="text-[#0D6E6E]">Touch</span>
                         </h1>
-                        <p className="text-xl text-white/80">We&apos;re here to help you plan your perfect Kerala experience.</p>
+                        <p className="text-base sm:text-xl text-[#4B5563]">We&apos;re here to help you plan your perfect Kerala experience.</p>
                     </div>
                 </div>
             </section>
@@ -54,10 +58,10 @@ export default function ContactPage() {
                     </div>
 
                     {/* Simple contact form */}
-                    <div className="bg-white rounded-2xl border border-[#E8E4DF] p-8 shadow-sm">
+                    <div className="bg-white rounded-2xl border border-[#E8E4DF] p-5 sm:p-8 shadow-sm">
                         <h2 className="text-2xl font-bold text-[#1C1C1E] mb-6">Send a Message</h2>
                         <form className="space-y-5">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-[#1C1C1E] mb-1.5">First Name</label>
                                     <input

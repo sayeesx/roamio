@@ -18,17 +18,20 @@ const howItWorks = [
 
 const audiences = [
   {
-    icon: <Heart size={28} />,
+    icon: <Heart size={20} className="sm:hidden" />,
+    iconLg: <Heart size={28} className="hidden sm:block" />,
     title: 'Medical Visitors',
     description: 'Access world-class Ayurveda and modern medical care in Kerala. We coordinate hospitals, consultations, stays, and follow-up care.',
   },
   {
-    icon: <Users size={28} />,
+    icon: <Users size={20} className="sm:hidden" />,
+    iconLg: <Users size={28} className="hidden sm:block" />,
     title: 'NRIs & Gulf Expats',
     description: 'Back home for a short visit? We help you maximize your time — property checks, family logistics, medical appointments, and more.',
   },
   {
-    icon: <Plane size={28} />,
+    icon: <Plane size={20} className="sm:hidden" />,
+    iconLg: <Plane size={28} className="hidden sm:block" />,
     title: 'International Tourists',
     description: 'Discover Kerala authentically. We build personalized itineraries that go beyond the tourist trail — curated, coordinated, cultural.',
   },
@@ -78,27 +81,26 @@ export default function HomePage() {
             style={{ background: 'radial-gradient(circle, #b8c9c9 0%, transparent 70%)' }} />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 lg:pt-32 pb-14 sm:pb-20">
           <div className="max-w-3xl">
             {/* Eyebrow */}
-            <div className="animate-fade-in-up inline-flex items-center gap-2 bg-[#0D6E6E]/10 border border-[#0D6E6E]/20 rounded-full px-4 py-2 mb-8">
-              <span className="w-2 h-2 bg-[#C9A84C] rounded-full animate-pulse" />
-              <span className="text-[#0D6E6E] text-sm font-semibold">Kerala&apos;s Premier AI Concierge</span>
+            <div className="animate-fade-in-up inline-flex items-center gap-2 bg-[#0D6E6E]/10 border border-[#0D6E6E]/20 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-5 sm:mb-8">
+              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#C9A84C] rounded-full animate-pulse" />
+              <span className="text-[#0D6E6E] text-xs sm:text-sm font-semibold">Kerala&apos;s Premier AI Concierge</span>
             </div>
 
-            <h1 className="animate-fade-in-up-delay-1 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-[#1C1C1E] leading-[1.1] mb-6">
-              AI-Powered{' '}
-              <span className="text-[#0D6E6E]">Medical & Travel</span>{' '}
-              Concierge for Kerala
+            <h1 className="animate-fade-in-up-delay-1 text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-[#1C1C1E] leading-[1.1] mb-5">
+              Travel Kerala,{' '}
+              <span className="text-[#0D6E6E]">effortlessly.</span>
             </h1>
 
-            <p className="animate-fade-in-up-delay-2 text-xl text-[#4B5563] mb-10 leading-relaxed max-w-2xl">
+            <p className="animate-fade-in-up-delay-2 text-base sm:text-xl text-[#4B5563] mb-8 sm:mb-10 leading-relaxed max-w-2xl">
               Smart planning. Seamless coordination. Trusted execution.
-              Your intelligent guide to Kerala — whether you&apos;re seeking healing, adventure, or home.
+              Your intelligent guide to Kerala whether you&apos;re seeking adventure, or healing.
             </p>
 
             {/* CTAs */}
-            <div className="animate-fade-in-up-delay-3 flex flex-wrap gap-4">
+            <div className="animate-fade-in-up-delay-3 flex flex-wrap gap-3 sm:gap-4">
               <CTAButton href="/plan/start" variant="primary" size="lg" className="bg-[#C9A84C] text-white hover:bg-[#b8962f]">
                 Plan My Visit <ArrowRight size={20} />
               </CTAButton>
@@ -108,7 +110,7 @@ export default function HomePage() {
             </div>
 
             {/* Trust indicators */}
-            <div className="animate-fade-in-up-delay-4 flex flex-wrap items-center gap-6 mt-10">
+            <div className="animate-fade-in-up-delay-4 flex flex-wrap items-center gap-4 sm:gap-6 mt-8 sm:mt-10">
               {[
                 { icon: <CheckCircle size={16} />, text: 'Verified local partners' },
                 { icon: <CheckCircle size={16} />, text: 'AI-powered planning' },
@@ -143,9 +145,9 @@ export default function HomePage() {
           title="Built for Every Type of Kerala Visitor"
           subtitle="Whether you're seeking healing, reconnecting with home, or discovering Kerala for the first time."
         />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           {audiences.map((item) => (
-            <FeatureCard key={item.title} icon={item.icon} title={item.title} description={item.description} />
+            <FeatureCard key={item.title} icon={<>{item.icon}{item.iconLg}</>} title={item.title} description={item.description} />
           ))}
         </div>
       </SectionContainer>
@@ -157,12 +159,12 @@ export default function HomePage() {
           title="The Best of Kerala, Curated for You"
           subtitle="Beyond the tourist trail — places chosen for experience, authenticity, and access."
         />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
           {destinations.map((dest) => (
             <Link
               key={dest.name}
               href={`/tourism#${dest.name.toLowerCase()}`}
-              className="group relative h-56 lg:h-72 rounded-2xl overflow-hidden cursor-pointer"
+              className="group relative h-40 sm:h-56 lg:h-72 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer"
             >
               {/* Color block background */}
               <div
@@ -172,14 +174,15 @@ export default function HomePage() {
                 }}
               />
               {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-0 p-5">
-                <p className="text-white/70 text-xs font-medium tracking-wide uppercase mb-1">{dest.tag}</p>
-                <h3 className="text-white text-xl font-bold">{dest.name}</h3>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute bottom-0 p-3 sm:p-5">
+                <p className="text-white/70 text-[10px] sm:text-xs font-medium tracking-wide uppercase mb-0.5 sm:mb-1">{dest.tag}</p>
+                <h3 className="text-white text-sm sm:text-xl font-bold leading-tight">{dest.name}</h3>
               </div>
-              <div className="absolute top-4 right-4 flex items-center gap-1 bg-white/10 backdrop-blur-sm rounded-full px-2.5 py-1">
-                <MapPin size={10} className="text-[#C9A84C]" />
-                <span className="text-white text-xs">Kerala</span>
+              <div className="absolute top-2 right-2 sm:top-4 sm:right-4 flex items-center gap-1 bg-white/10 backdrop-blur-sm rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1">
+                <MapPin size={8} className="text-[#C9A84C] sm:hidden" />
+                <MapPin size={10} className="text-[#C9A84C] hidden sm:block" />
+                <span className="text-white text-[10px] sm:text-xs">Kerala</span>
               </div>
             </Link>
           ))}
@@ -188,7 +191,7 @@ export default function HomePage() {
 
       {/* ——— Trust & Safety ——— */}
       <SectionContainer variant="dark" id="trust">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           <div>
             <SectionHeading
               eyebrow="Why Trust Roamio"
@@ -215,16 +218,16 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {[
               { number: '500+', label: 'Visits Coordinated' },
               { number: '15+', label: 'Hospital Partners' },
               { number: '98%', label: 'Satisfaction Rate' },
               { number: '24/7', label: 'Concierge Support' },
             ].map((stat) => (
-              <div key={stat.label} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center border border-white/10">
-                <p className="text-3xl font-bold text-[#C9A84C] mb-1">{stat.number}</p>
-                <p className="text-white/60 text-sm">{stat.label}</p>
+              <div key={stat.label} className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 text-center border border-white/10">
+                <p className="text-2xl sm:text-3xl font-bold text-[#C9A84C] mb-0.5 sm:mb-1">{stat.number}</p>
+                <p className="text-white/60 text-xs sm:text-sm">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -242,17 +245,17 @@ export default function HomePage() {
           {testimonials.map((t) => (
             <div
               key={t.author}
-              className="bg-white rounded-2xl p-8 border border-[#E8E4DF] hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+              className="bg-white rounded-2xl p-5 sm:p-8 border border-[#E8E4DF] hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
             >
-              <div className="flex gap-1 mb-5">
+              <div className="flex gap-1 mb-3 sm:mb-5">
                 {Array.from({ length: t.rating }).map((_, i) => (
-                  <Star key={i} size={16} className="fill-[#C9A84C] text-[#C9A84C]" />
+                  <Star key={i} size={14} className="fill-[#C9A84C] text-[#C9A84C]" />
                 ))}
               </div>
-              <p className="text-[#1C1C1E] leading-relaxed mb-6 italic">&ldquo;{t.quote}&rdquo;</p>
+              <p className="text-[#1C1C1E] text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 italic">&ldquo;{t.quote}&rdquo;</p>
               <div>
-                <p className="font-semibold text-[#1C1C1E]">{t.author}</p>
-                <p className="text-sm text-[#6B7280]">{t.role}</p>
+                <p className="font-semibold text-[#1C1C1E] text-sm sm:text-base">{t.author}</p>
+                <p className="text-xs sm:text-sm text-[#6B7280]">{t.role}</p>
               </div>
             </div>
           ))}

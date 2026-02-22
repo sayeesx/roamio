@@ -145,7 +145,7 @@ export default function Header() {
                             <Link
                                 key={item.link}
                                 href={item.link}
-                                className="py-2.5 px-3 rounded-lg text-[#1C1C1E] font-medium hover:bg-[#F2EFE9] transition-colors"
+                                className="py-2 px-2.5 rounded-lg text-sm text-[#1C1C1E] font-medium hover:bg-[#F2EFE9] transition-colors"
                                 onClick={() => setMobileOpen(false)}
                             >
                                 {item.name}
@@ -161,7 +161,7 @@ export default function Header() {
                             </button>
                             <Link
                                 href="/plan/start"
-                                className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-[#C9A84C] text-white hover:bg-[#b8962f] transition-colors"
+                                className="px-3 py-2 rounded-lg text-xs font-semibold bg-[#C9A84C] text-white hover:bg-[#b8962f] transition-colors"
                                 onClick={() => setMobileOpen(false)}
                             >
                                 Plan My Visit
@@ -229,10 +229,10 @@ function RoamioLogo({ dark }: { dark?: boolean }) {
                 }
             }}
         >
-            <div className="w-8 h-8 rounded-lg bg-[#0D6E6E] flex items-center justify-center shadow-sm">
-                <span className="text-white text-sm font-bold">R</span>
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#0D6E6E] flex items-center justify-center shadow-sm">
+                <span className="text-white text-xs sm:text-sm font-bold">R</span>
             </div>
-            <span className={cn('text-xl font-bold tracking-tight transition-colors', dark ? 'text-[#0D6E6E]' : 'text-[#1C1C1E]')}>
+            <span className={cn('text-lg sm:text-xl font-bold tracking-tight transition-colors', dark ? 'text-[#0D6E6E]' : 'text-[#1C1C1E]')}>
                 Roamio
             </span>
         </Link>

@@ -11,16 +11,20 @@ export const metadata: Metadata = {
 export default function AboutPage() {
     return (
         <>
-            <section className="relative pt-32 pb-20 gradient-hero overflow-hidden">
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-20 right-20 w-72 h-72 rounded-full bg-[#C9A84C] blur-3xl" />
+            <section
+                className="relative pt-24 sm:pt-28 lg:pt-32 pb-14 sm:pb-20 overflow-hidden"
+                style={{ background: 'linear-gradient(160deg, #F2EFE9 0%, #EDE8E0 60%, #E8E2D8 100%)' }}
+            >
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-30"
+                        style={{ background: 'radial-gradient(circle, #d4c9a8 0%, transparent 70%)' }} />
                 </div>
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-3xl">
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">
-                            About <span className="text-[#C9A84C]">Roamio</span>
+                        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-[#1C1C1E] leading-[1.1] mb-5">
+                            About <span className="text-[#0D6E6E]">Roamio</span>
                         </h1>
-                        <p className="text-xl text-white/80 leading-relaxed">
+                        <p className="text-base sm:text-xl text-[#4B5563] leading-relaxed">
                             We built Roamio because we saw a gap: Kerala has world-class medical and tourism offerings, but no intelligent system to help visitors navigate them.
                         </p>
                     </div>

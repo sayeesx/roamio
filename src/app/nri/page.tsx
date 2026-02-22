@@ -35,22 +35,27 @@ export default function NRIConciergePage() {
     return (
         <>
             {/* Hero */}
-            <section className="relative pt-32 pb-20 gradient-hero overflow-hidden">
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-20 right-20 w-72 h-72 rounded-full bg-[#C9A84C] blur-3xl" />
-                    <div className="absolute bottom-10 left-10 w-96 h-96 rounded-full bg-white blur-3xl" />
+            <section
+                className="relative pt-24 sm:pt-28 lg:pt-32 pb-14 sm:pb-20 overflow-hidden"
+                style={{ background: 'linear-gradient(160deg, #F2EFE9 0%, #EDE8E0 60%, #E8E2D8 100%)' }}
+            >
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-30"
+                        style={{ background: 'radial-gradient(circle, #d4c9a8 0%, transparent 70%)' }} />
+                    <div className="absolute bottom-0 -left-24 w-[400px] h-[400px] rounded-full opacity-20"
+                        style={{ background: 'radial-gradient(circle, #b8c9c9 0%, transparent 70%)' }} />
                 </div>
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-3xl">
-                        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
+                        <div className="inline-flex items-center gap-2 bg-[#0D6E6E]/10 border border-[#0D6E6E]/20 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-5 sm:mb-8">
                             <Users size={14} className="text-[#C9A84C]" />
-                            <span className="text-white/90 text-sm font-medium">NRI Concierge</span>
+                            <span className="text-[#0D6E6E] text-xs sm:text-sm font-semibold">NRI Concierge</span>
                         </div>
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">
+                        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-[#1C1C1E] leading-[1.1] mb-5">
                             Every Day Back Home
-                            <span className="text-[#C9A84C]"> Should Count</span>
+                            <span className="text-[#0D6E6E]"> Should Count</span>
                         </h1>
-                        <p className="text-xl text-white/80 mb-10 leading-relaxed">
+                        <p className="text-base sm:text-xl text-[#4B5563] mb-8 sm:mb-10 leading-relaxed">
                             You&apos;ve been planning this trip for months. Don&apos;t let logistics eat your time. Roamio coordinates everything so you can focus on what matters.
                         </p>
                         <CTAButton href="/plan/start?purpose=nri" variant="primary" size="lg">
@@ -101,7 +106,7 @@ export default function NRIConciergePage() {
                 <SectionHeading eyebrow="NRI Stories" title="From People Like You" />
                 <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
                     {testimonials.map((t) => (
-                        <div key={t.author} className="bg-[#F9F7F4] rounded-2xl p-8 border border-[#E8E4DF]">
+                        <div key={t.author} className="bg-[#F9F7F4] rounded-2xl p-5 sm:p-8 border border-[#E8E4DF]">
                             <p className="text-[#1C1C1E] leading-relaxed italic mb-5">&ldquo;{t.quote}&rdquo;</p>
                             <p className="font-semibold text-[#1C1C1E]">{t.author}</p>
                             <p className="text-sm text-[#6B7280]">{t.role}</p>

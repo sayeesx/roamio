@@ -62,22 +62,27 @@ export default function TourismPlanningPage() {
     return (
         <>
             {/* Hero */}
-            <section className="relative pt-32 pb-20 gradient-hero overflow-hidden">
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-20 right-20 w-72 h-72 rounded-full bg-[#C9A84C] blur-3xl" />
-                    <div className="absolute bottom-10 left-10 w-96 h-96 rounded-full bg-white blur-3xl" />
+            <section
+                className="relative pt-24 sm:pt-28 lg:pt-32 pb-14 sm:pb-20 overflow-hidden"
+                style={{ background: 'linear-gradient(160deg, #F2EFE9 0%, #EDE8E0 60%, #E8E2D8 100%)' }}
+            >
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-30"
+                        style={{ background: 'radial-gradient(circle, #d4c9a8 0%, transparent 70%)' }} />
+                    <div className="absolute bottom-0 -left-24 w-[400px] h-[400px] rounded-full opacity-20"
+                        style={{ background: 'radial-gradient(circle, #b8c9c9 0%, transparent 70%)' }} />
                 </div>
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-3xl">
-                        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
+                        <div className="inline-flex items-center gap-2 bg-[#0D6E6E]/10 border border-[#0D6E6E]/20 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-5 sm:mb-8">
                             <Compass size={14} className="text-[#C9A84C]" />
-                            <span className="text-white/90 text-sm font-medium">Tourism Planning</span>
+                            <span className="text-[#0D6E6E] text-xs sm:text-sm font-semibold">Tourism Planning</span>
                         </div>
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">
+                        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-[#1C1C1E] leading-[1.1] mb-5">
                             Personalized Kerala
-                            <span className="text-[#C9A84C]"> Travel Planning</span>
+                            <span className="text-[#0D6E6E]"> Travel Planning</span>
                         </h1>
-                        <p className="text-xl text-white/80 mb-10 leading-relaxed">
+                        <p className="text-base sm:text-xl text-[#4B5563] mb-8 sm:mb-10 leading-relaxed">
                             Tell us who you are and what you seek. We&apos;ll build an itinerary that feels like it was made just for you — because it was.
                         </p>
                         <CTAButton href="/plan/start?purpose=tourism" variant="primary" size="lg">
@@ -106,7 +111,7 @@ export default function TourismPlanningPage() {
                             className="relative rounded-2xl overflow-hidden bg-white border border-[#E8E4DF] hover:shadow-xl transition-shadow duration-300"
                         >
                             <div className="h-3" style={{ background: `linear-gradient(90deg, ${dest.color}, ${dest.color}99)` }} />
-                            <div className="p-8">
+                            <div className="p-5 sm:p-8">
                                 <p className="text-xs font-semibold tracking-widest uppercase text-[#6B7280] mb-2">{dest.tagline}</p>
                                 <h3 className="text-2xl font-bold text-[#1C1C1E] mb-3">{dest.name}</h3>
                                 <p className="text-[#6B7280] leading-relaxed mb-5">{dest.description}</p>
@@ -127,7 +132,7 @@ export default function TourismPlanningPage() {
                 <div className="max-w-3xl mx-auto">
                     <div className="space-y-4">
                         {sampleItinerary.map((item, i) => (
-                            <div key={i} className="flex gap-6 bg-white rounded-2xl border border-[#E8E4DF] p-6 hover:border-[#0D6E6E]/30 transition-colors">
+                            <div key={i} className="flex flex-col sm:flex-row gap-4 sm:gap-6 bg-white rounded-2xl border border-[#E8E4DF] p-5 sm:p-6 hover:border-[#0D6E6E]/30 transition-colors">
                                 <div className="shrink-0 text-center">
                                     <div className="w-16 h-16 rounded-xl gradient-primary flex items-center justify-center text-white text-xs font-bold text-center leading-tight px-1">
                                         {item.day}

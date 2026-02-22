@@ -128,13 +128,13 @@ function IntakeForm() {
                                         }`}>
                                         {step > i + 1 ? <CheckCircle size={16} /> : i + 1}
                                     </div>
-                                    {i < totalSteps - 2 && <div className={`h-0.5 w-12 sm:w-20 rounded transition-all ${step > i + 1 ? 'bg-[#0D6E6E]' : 'bg-[#E8E4DF]'}`} />}
+                                    {i < totalSteps - 2 && <div className={`h-0.5 w-8 sm:w-20 rounded transition-all ${step > i + 1 ? 'bg-[#0D6E6E]' : 'bg-[#E8E4DF]'}`} />}
                                 </div>
                             ))}
                         </div>
                     )}
 
-                    <div className="bg-white rounded-2xl border border-[#E8E4DF] shadow-sm p-8">
+                    <div className="bg-white rounded-2xl border border-[#E8E4DF] shadow-sm p-5 sm:p-8">
 
                         {/* ——— Step 1: Purpose ——— */}
                         {step === 1 && (
@@ -192,7 +192,7 @@ function IntakeForm() {
                                         <textarea rows={3} className={inputCls} placeholder="Briefly describe your condition or treatment need..." {...medForm.register('conditionSummary')} />
                                         {medForm.formState.errors.conditionSummary && <p className={errorCls}>{medForm.formState.errors.conditionSummary.message}</p>}
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>
                                             <label className={labelCls}>Approx. Budget (USD)</label>
                                             <select className={inputCls} {...medForm.register('budget')}>
@@ -234,7 +234,7 @@ function IntakeForm() {
                                 <h2 className="text-2xl font-bold text-[#1C1C1E] mb-2">Travel Preferences</h2>
                                 <p className="text-[#6B7280] mb-8">Help us understand your travel style so we can build the perfect Kerala itinerary.</p>
                                 <div className="space-y-5">
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>
                                             <label className={labelCls}>Number of Travelers</label>
                                             <select className={inputCls} {...tourForm.register('travelers')}>

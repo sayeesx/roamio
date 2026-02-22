@@ -29,22 +29,27 @@ export default function MedicalConciergePage() {
     return (
         <>
             {/* Hero */}
-            <section className="relative pt-32 pb-20 gradient-hero overflow-hidden">
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-20 right-20 w-72 h-72 rounded-full bg-[#C9A84C] blur-3xl" />
-                    <div className="absolute bottom-10 left-10 w-96 h-96 rounded-full bg-white blur-3xl" />
+            <section
+                className="relative pt-24 sm:pt-28 lg:pt-32 pb-14 sm:pb-20 overflow-hidden"
+                style={{ background: 'linear-gradient(160deg, #F2EFE9 0%, #EDE8E0 60%, #E8E2D8 100%)' }}
+            >
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-30"
+                        style={{ background: 'radial-gradient(circle, #d4c9a8 0%, transparent 70%)' }} />
+                    <div className="absolute bottom-0 -left-24 w-[400px] h-[400px] rounded-full opacity-20"
+                        style={{ background: 'radial-gradient(circle, #b8c9c9 0%, transparent 70%)' }} />
                 </div>
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-3xl">
-                        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
+                        <div className="inline-flex items-center gap-2 bg-[#0D6E6E]/10 border border-[#0D6E6E]/20 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-5 sm:mb-8">
                             <HeartPulse size={14} className="text-[#C9A84C]" />
-                            <span className="text-white/90 text-sm font-medium">Medical Concierge</span>
+                            <span className="text-[#0D6E6E] text-xs sm:text-sm font-semibold">Medical Concierge</span>
                         </div>
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">
+                        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-[#1C1C1E] leading-[1.1] mb-5">
                             Medical Travel to Kerala
-                            <span className="text-[#C9A84C]"> Made Simple</span>
+                            <span className="text-[#0D6E6E]"> Made Simple</span>
                         </h1>
-                        <p className="text-xl text-white/80 mb-10 leading-relaxed">
+                        <p className="text-base sm:text-xl text-[#4B5563] mb-8 sm:mb-10 leading-relaxed">
                             World-class Ayurveda, advanced hospitals, and compassionate care — all coordinated by Roamio so you can focus on healing.
                         </p>
                         <CTAButton href="/plan/start?purpose=medical" variant="primary" size="lg">
@@ -109,7 +114,7 @@ export default function MedicalConciergePage() {
                             key={faq.q}
                             className="group bg-white border border-[#E8E4DF] rounded-2xl overflow-hidden"
                         >
-                            <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-semibold text-[#1C1C1E] hover:text-[#0D6E6E] transition-colors">
+                            <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer list-none font-semibold text-[#1C1C1E] hover:text-[#0D6E6E] transition-colors text-sm sm:text-base">
                                 {faq.q}
                                 <span className="text-[#0D6E6E] text-xl leading-none group-open:rotate-45 transition-transform duration-200">+</span>
                             </summary>

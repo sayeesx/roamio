@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle, Users, Heart, Plane, Star, Shield, Lock, MapPi
 import { SectionContainer, SectionHeading } from '@/components/ui/SectionContainer'
 import { CTAButton } from '@/components/ui/CTAButton'
 import { FeatureCard, StepIndicator } from '@/components/ui/Cards'
+import { CountUpStats } from '@/components/ui/CountUpStats'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -32,20 +33,20 @@ const audiences = [
   {
     icon: <Heart size={20} className="sm:hidden" />,
     iconLg: <Heart size={28} className="hidden sm:block" />,
-    title: 'Medical Visitors',
-    description: 'Access world-class Ayurveda and modern medical care in Kerala. We coordinate hospitals, consultations, stays, and follow-up care.',
-  },
-  {
-    icon: <Users size={20} className="sm:hidden" />,
-    iconLg: <Users size={28} className="hidden sm:block" />,
-    title: 'NRIs & Gulf Expats',
-    description: 'Back home for a short visit? We help you maximize your time — property checks, family logistics, medical appointments, and more.',
+    title: 'Wellness & Care Travelers',
+    description: 'Visiting for Ayurveda or personal well-being? We coordinate appointments, stays, local travel, and everything around it — so you can focus on yourself.',
   },
   {
     icon: <Plane size={20} className="sm:hidden" />,
     iconLg: <Plane size={28} className="hidden sm:block" />,
-    title: 'International Tourists',
-    description: 'Discover Kerala authentically. We build personalized itineraries that go beyond the tourist trail — curated, coordinated, cultural.',
+    title: 'International Explorers',
+    description: 'Experience Kerala beyond the usual routes. We create thoughtfully planned journeys that feel authentic, comfortable, and memorable.',
+  },
+  {
+    icon: <Users size={20} className="sm:hidden" />,
+    iconLg: <Users size={28} className="hidden sm:block" />,
+    title: 'Visitors From Abroad',
+    description: 'We handle travel plans, personal errands, cargo and courier needs, and full logistics support — so your visit to Kerala feels effortless.',
   },
 ]
 
@@ -159,25 +160,26 @@ export default function HomePage() {
         />
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {[
-            { icon: <Car size={22} />, label: 'Cab & Local Transport', color: '#0D6E6E' },
-            { icon: <Plane size={22} />, label: 'Flight Tickets', color: '#1a5c8a' },
-            { icon: <Stethoscope size={22} />, label: 'Hospital Consultation', color: '#5c1a3a' },
-            { icon: <Hotel size={22} />, label: 'Hotel & Stays', color: '#5c3a1a' },
-            { icon: <MapPin size={22} />, label: 'Airport Pickup', color: '#1a4a1a' },
-            { icon: <FileText size={22} />, label: 'Visa Guidance', color: '#3a1a5c' },
+            { icon: <Car size={22} />, label: 'Cab & Local Transport', color: '#0D6E6E', href: '/services/cabs' },
+            { icon: <Plane size={22} />, label: 'Flight Tickets', color: '#1a5c8a', href: '/services/flights' },
+            { icon: <Stethoscope size={22} />, label: 'Hospital Consultation', color: '#5c1a3a', href: '/services/hospital' },
+            { icon: <Hotel size={22} />, label: 'Hotel & Stays', color: '#5c3a1a', href: '/services/stays' },
+            { icon: <MapPin size={22} />, label: 'Airport Pickup', color: '#1a4a1a', href: '/services/airport-pickup' },
+            { icon: <FileText size={22} />, label: 'Visa Guidance', color: '#3a1a5c', href: '/services/visa' },
           ].map((service) => (
-            <div
+            <Link
               key={service.label}
-              className="group flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl bg-white border border-[#E8E4DF] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+              href={service.href}
+              className="group flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl bg-white border border-[#E8E4DF] hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
             >
               <div
-                className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center mb-3 text-white group-hover:scale-110 transition-transform duration-300"
-                style={{ background: `linear-gradient(135deg, ${service.color} 0%, ${service.color}cc 100%)` }}
+                className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 bg-[#F2EFE9]"
+                style={{ color: service.color }}
               >
                 {service.icon}
               </div>
               <p className="text-xs sm:text-sm font-semibold text-[#1C1C1E] leading-tight">{service.label}</p>
-            </div>
+            </Link>
           ))}
         </div>
         <p className="text-center text-sm text-[#6B7280] mt-6">
@@ -190,11 +192,11 @@ export default function HomePage() {
       </SectionContainer>
 
       {/* ——— Who We Serve ——— */}
-      <SectionContainer id="services" variant="tinted">
+      <SectionContainer id="services">
         <SectionHeading
           eyebrow="Who We Serve"
-          title="Built for Every Type of Kerala Visitor"
-          subtitle="Whether you're seeking healing, reconnecting with home, or discovering Kerala for the first time."
+          title="Made for Every Kind of Kerala Visitor"
+          subtitle="Whether you are returning home, exploring for the first time, or planning something meaningful, we make your time in Kerala smooth and well organised."
         />
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           {audiences.map((item) => (
@@ -269,19 +271,12 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            {[
-              { number: '500+', label: 'Visits Coordinated' },
-              { number: '15+', label: 'Hospital Partners' },
-              { number: '98%', label: 'Satisfaction Rate' },
-              { number: '24/7', label: 'Concierge Support' },
-            ].map((stat) => (
-              <div key={stat.label} className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-6 text-center border border-white/10">
-                <p className="text-2xl sm:text-3xl font-bold text-[#C9A84C] mb-0.5 sm:mb-1">{stat.number}</p>
-                <p className="text-white/60 text-xs sm:text-sm">{stat.label}</p>
-              </div>
-            ))}
-          </div>
+          <CountUpStats stats={[
+            { number: '500+', label: 'Visits Coordinated' },
+            { number: '15+', label: 'Hospital Partners' },
+            { number: '98%', label: 'Satisfaction Rate' },
+            { number: '24/7', label: 'Concierge Support' },
+          ]} />
         </div>
       </SectionContainer>
 
@@ -317,9 +312,9 @@ export default function HomePage() {
       <SectionContainer>
         <div className="text-center max-w-2xl mx-auto">
           <SectionHeading
-            eyebrow="Ready to Begin?"
+            eyebrow="Ready to Begin"
             title="Your Kerala Journey Starts Here"
-            subtitle="Tell us what you need. Our AI will build your personalized plan in minutes."
+            subtitle="Tell us what you need, and we will craft a personalised plan designed around you."
           />
           <div className="flex flex-wrap justify-center gap-4">
             <CTAButton href="/plan/start" variant="secondary" size="lg">

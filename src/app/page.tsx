@@ -303,7 +303,7 @@ export default function HomePage() {
 
       {/* ——— Final CTA ——— */}
       <SectionContainer>
-        <div className="text-center max-w-2xl mx-auto">
+        <div className="text-center max-w-5xl mx-auto whitespace-nowrap">
           <SectionHeading
             eyebrow="Ready to Begin"
             title="Your Kerala Journey Starts Here"

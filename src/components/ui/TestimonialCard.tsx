@@ -22,8 +22,8 @@ export function TestimonialCard({ quote, author, role, rating }: TestimonialCard
             }}
             onMouseEnter={(e) => {
                 const el = e.currentTarget
-                el.style.boxShadow = '8px 8px #0a3cff'
-                el.style.borderColor = '#0a3cff'
+                el.style.boxShadow = '8px 8px #0D6E6E'
+                el.style.borderColor = '#0D6E6E'
                 el.style.transform = 'translate(-8px, -8px)'
             }}
             onMouseLeave={(e) => {
@@ -105,7 +105,7 @@ export function TestimonialCard({ quote, author, role, rating }: TestimonialCard
                                 width: '112%',
                                 left: 0,
                                 bottom: 0,
-                                background: '#0a3cff',
+                                background: '#0D6E6E',
                                 transform: 'scaleX(0)',
                                 transformOrigin: 'right',
                                 transition: 'transform 0.64s cubic-bezier(0.23, 1, 0.32, 1)',

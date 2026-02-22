@@ -30,13 +30,13 @@ const useMobileDetection = () => {
 
     useEffect(() => {
         setHasMounted(true)
-        const check = () => setIsMobile(window.innerWidth < 1024)
+        const check = () => setIsMobile(window.innerWidth < 768) // Lower threshold for mobile menu
         check()
         window.addEventListener('resize', check)
         return () => window.removeEventListener('resize', check)
     }, [])
 
-    return { isMobile: hasMounted ? isMobile : false, hasMounted }
+    return { isMobile, hasMounted }
 }
 
 // ─── Language toggle ──────────────────────────────────────────────────────────
@@ -218,7 +218,7 @@ export default function Header() {
     const [mobileVisible, setMobileVisible] = useState(true)
     const [mobileOpen, setMobileOpen] = useState(false)
     const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
-    const { isMobile } = useMobileDetection()
+    const { isMobile, hasMounted } = useMobileDetection()
     const { lang, toggleLang } = useLang()
     const lastScrollY = useRef(0)
 
@@ -253,6 +253,8 @@ export default function Header() {
     }, [])
 
     // ── Mobile layout ─────────────────────────────────────────────────────────
+    if (!hasMounted) return <div className="h-16" /> // Avoid hydration flash
+
     if (isMobile) {
         return (
             <header

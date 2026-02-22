@@ -50,7 +50,7 @@ export function SectionHeading({ eyebrow, title, subtitle, subtitleClassName, ce
             </h2>
             {subtitle && (
                 <p className={cn(
-                    'text-base sm:text-lg max-w-2xl leading-relaxed',
+                    'text-base sm:text-lg max-w-2xl leading-relaxed break-words',
                     centered && 'mx-auto',
                     light ? 'text-white/70' : 'text-[#6B7280]',
                     subtitleClassName,

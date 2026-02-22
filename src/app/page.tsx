@@ -124,12 +124,12 @@ export default function HomePage() {
               <span className="text-[#0D6E6E] text-xs sm:text-sm font-semibold">Kerala&apos;s Premier AI Concierge</span>
             </div>
 
-            <h1 className="animate-fade-in-up-delay-1 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-[#1C1C1E] leading-[1.1] mb-5">
+            <h1 className="animate-fade-in-up-delay-1 text-4xl sm:text-5xl lg:text-7xl font-bold text-[#1C1C1E] leading-[1.1] mb-5">
               Travel Kerala,{' '}
               <span className="text-[#0D6E6E]">effortlessly.</span>
             </h1>
 
-            <p className="animate-fade-in-up-delay-2 text-base sm:text-xl text-[#4B5563] mb-8 sm:mb-10 leading-relaxed max-w-2xl">
+            <p className="animate-fade-in-up-delay-2 text-lg sm:text-xl text-[#4B5563] mb-8 sm:mb-10 leading-relaxed max-w-2xl">
               Smart planning. Seamless coordination. Trusted execution.
               Your intelligent guide to Kerala whether you&apos;re seeking adventure, or healing.
             </p>
@@ -233,7 +233,6 @@ export default function HomePage() {
           eyebrow="Featured Destinations"
           title="The Best of Kerala, Curated for You"
           subtitle="Beyond the tourist trail — places chosen for experience, authenticity, and access."
-          subtitleClassName="whitespace-nowrap"
         />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
           {destinations.map((dest) => (

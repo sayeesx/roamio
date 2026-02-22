@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, CheckCircle, Users, Heart, Plane, Star, Shield, Lock, MapPin } from 'lucide-react'
+import { ArrowRight, CheckCircle, Users, Heart, Plane, Star, Shield, Lock, MapPin, Car, FileText, Hotel, Stethoscope } from 'lucide-react'
 import { SectionContainer, SectionHeading } from '@/components/ui/SectionContainer'
 import { CTAButton } from '@/components/ui/CTAButton'
 import { FeatureCard, StepIndicator } from '@/components/ui/Cards'
@@ -11,9 +11,21 @@ export const metadata: Metadata = {
 }
 
 const howItWorks = [
-  { number: 1, label: 'Submit Your Details', description: 'Tell us your purpose — medical, tourism, or NRI visit — and share relevant details.' },
-  { number: 2, label: 'AI Creates Your Plan', description: 'Our AI analyzes your needs and generates a personalized, actionable plan within hours.' },
-  { number: 3, label: 'Human Team Executes', description: 'Our verified local team coordinates every detail — appointments, stays, logistics.' },
+  {
+    number: 1,
+    label: 'Tell Us Your Plan',
+    description: 'Share your purpose for visiting Kerala — whether it\'s relaxation, medical consultation, exploring, or other visits — along with your dates and preferences.',
+  },
+  {
+    number: 2,
+    label: 'We Design Your Journey',
+    description: 'We arrange everything you need: flight tickets, visa guidance (if required), airport pickup, stays, food preferences, local transport, appointments, and trusted local support.',
+  },
+  {
+    number: 3,
+    label: 'We Take Care Until You Return',
+    description: 'From the moment you land to the day you fly back, our team coordinates every detail — ensuring a smooth, comfortable, and worry-free experience.',
+  },
 ]
 
 const audiences = [
@@ -136,6 +148,45 @@ export default function HomePage() {
           subtitle="Three simple steps from intent to execution. We handle everything in between."
         />
         <StepIndicator steps={howItWorks} />
+      </SectionContainer>
+
+      {/* ——— We Can Also Arrange ——— */}
+      <SectionContainer variant="tinted" id="arrange">
+        <SectionHeading
+          eyebrow="Individual Services"
+          title="We Can Arrange Anything"
+          subtitle="Need just one thing sorted? We handle individual services too — no need to book a full package."
+        />
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+          {[
+            { icon: <Car size={22} />, label: 'Cab & Local Transport', color: '#0D6E6E' },
+            { icon: <Plane size={22} />, label: 'Flight Tickets', color: '#1a5c8a' },
+            { icon: <Stethoscope size={22} />, label: 'Hospital Consultation', color: '#5c1a3a' },
+            { icon: <Hotel size={22} />, label: 'Hotel & Stays', color: '#5c3a1a' },
+            { icon: <MapPin size={22} />, label: 'Airport Pickup', color: '#1a4a1a' },
+            { icon: <FileText size={22} />, label: 'Visa Guidance', color: '#3a1a5c' },
+          ].map((service) => (
+            <div
+              key={service.label}
+              className="group flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl bg-white border border-[#E8E4DF] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+            >
+              <div
+                className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center mb-3 text-white group-hover:scale-110 transition-transform duration-300"
+                style={{ background: `linear-gradient(135deg, ${service.color} 0%, ${service.color}cc 100%)` }}
+              >
+                {service.icon}
+              </div>
+              <p className="text-xs sm:text-sm font-semibold text-[#1C1C1E] leading-tight">{service.label}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-center text-sm text-[#6B7280] mt-6">
+          Not sure what you need?{' '}
+          <Link href="/plan/start" className="text-[#0D6E6E] font-semibold hover:underline">
+            Tell us your plan
+          </Link>{' '}
+          and we&apos;ll figure it out together.
+        </p>
       </SectionContainer>
 
       {/* ——— Who We Serve ——— */}

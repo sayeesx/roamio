@@ -59,21 +59,23 @@ export function StepIndicator({ steps, variant = 'horizontal' }: StepIndicatorPr
     }
 
     return (
-        <div className="flex flex-col sm:flex-row gap-6 sm:gap-0">
+        <div className="flex flex-col sm:flex-row gap-8 sm:gap-0">
             {steps.map((step, i) => (
-                <div key={step.number} className="flex sm:flex-col items-start sm:items-center flex-1 gap-4 sm:gap-0">
-                    <div className="flex items-center sm:flex-col gap-4 sm:gap-0 w-full">
-                        <div className="w-12 h-12 rounded-full gradient-primary flex items-center justify-center text-white font-bold shrink-0">
+                <div key={step.number} className="flex sm:flex-col flex-1 gap-4 sm:gap-0">
+                    {/* Number + horizontal connector (desktop) */}
+                    <div className="flex items-center sm:flex-col sm:items-center gap-0">
+                        <div className="w-11 h-11 rounded-full gradient-primary flex items-center justify-center text-white font-bold shrink-0">
                             {step.number}
                         </div>
                         {i < steps.length - 1 && (
-                            <div className="hidden sm:block h-0.5 flex-1 bg-gradient-to-r from-[#0D6E6E] to-[#0D6E6E]/20 mt-6 mx-2" />
+                            <div className="hidden sm:block h-0.5 flex-1 bg-gradient-to-r from-[#0D6E6E] to-[#0D6E6E]/20 mt-5 mx-3" />
                         )}
                     </div>
-                    <div className="sm:text-center sm:mt-4 sm:px-4">
-                        <h4 className="font-semibold text-[#1C1C1E]">{step.label}</h4>
+                    {/* Text */}
+                    <div className="sm:text-center sm:mt-4 sm:px-3 flex-1">
+                        <h4 className="font-semibold text-[#1C1C1E] text-sm sm:text-base mb-1">{step.label}</h4>
                         {step.description && (
-                            <p className="text-sm text-[#6B7280] mt-1">{step.description}</p>
+                            <p className="text-xs sm:text-sm text-[#6B7280] leading-relaxed">{step.description}</p>
                         )}
                     </div>
                 </div>

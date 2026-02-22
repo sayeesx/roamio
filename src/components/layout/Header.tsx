@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import { IconMenu2, IconX } from '@tabler/icons-react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Globe } from 'lucide-react'
 
 const navLinks = [
@@ -31,7 +31,7 @@ const useMobileDetection = () => {
     return { isMobile: hasMounted ? isMobile : false, hasMounted }
 }
 
-// ─── Language toggle (preserved from original) ──────────────────────────────
+// ─── Language toggle ──────────────────────────────────────────────────────────
 const useLang = () => {
     const [lang, setLang] = useState<'EN' | 'AR'>('EN')
     const toggleLang = () => {
@@ -43,7 +43,7 @@ const useLang = () => {
     return { lang, toggleLang }
 }
 
-// ─── NavItems ────────────────────────────────────────────────────────────────
+// ─── NavItems ─────────────────────────────────────────────────────────────────
 function NavItems({
     items,
     className,
@@ -77,12 +77,8 @@ function NavItems({
                             className={cn(
                                 'relative px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-lg hover:bg-black/5',
                                 dark
-                                    ? isActive
-                                        ? 'text-[#C9A84C] font-bold'
-                                        : 'text-[#1C1C1E]'
-                                    : isActive
-                                        ? 'text-[#C9A84C] font-bold'
-                                        : 'text-[#4B5563]',
+                                    ? isActive ? 'text-[#C9A84C] font-bold' : 'text-[#1C1C1E]'
+                                    : isActive ? 'text-[#C9A84C] font-bold' : 'text-[#4B5563]',
                             )}
                         >
                             {item.name}
@@ -99,19 +95,60 @@ function NavItems({
     )
 }
 
-// ─── Main Header ─────────────────────────────────────────────────────────────
+// ─── Logo ─────────────────────────────────────────────────────────────────────
+function RoamioLogo({ dark }: { dark?: boolean }) {
+    const pathname = usePathname()
+    return (
+        <Link
+            href="/"
+            className="flex items-center gap-2 group"
+            onClick={(e) => {
+                if (pathname === '/') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                    e.preventDefault()
+                }
+            }}
+        >
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#0D6E6E] flex items-center justify-center shadow-sm">
+                <span className="text-white text-xs sm:text-sm font-bold">R</span>
+            </div>
+            <span className={cn('text-lg sm:text-xl font-bold tracking-tight transition-colors', dark ? 'text-[#0D6E6E]' : 'text-[#1C1C1E]')}>
+                Roamio
+            </span>
+        </Link>
+    )
+}
+
+// ─── Main Header ──────────────────────────────────────────────────────────────
 export default function Header() {
     const [visible, setVisible] = useState(false)
+    const [mobileVisible, setMobileVisible] = useState(true)
     const [mobileOpen, setMobileOpen] = useState(false)
     const { isMobile } = useMobileDetection()
     const { lang, toggleLang } = useLang()
+    const lastScrollY = useRef(0)
 
     useEffect(() => {
         let ticking = false
         const onScroll = () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
-                    setVisible(window.scrollY > 50)
+                    const currentY = window.scrollY
+
+                    // Desktop pill visibility
+                    setVisible(currentY > 50)
+
+                    // Mobile auto-hide: show at top, hide on scroll-down, show on scroll-up
+                    if (currentY <= 60) {
+                        setMobileVisible(true)
+                    } else if (currentY > lastScrollY.current + 8) {
+                        setMobileVisible(false)
+                        setMobileOpen(false)
+                    } else if (currentY < lastScrollY.current - 4) {
+                        setMobileVisible(true)
+                    }
+
+                    lastScrollY.current = currentY
                     ticking = false
                 })
                 ticking = true
@@ -121,14 +158,18 @@ export default function Header() {
         return () => window.removeEventListener('scroll', onScroll)
     }, [])
 
-    // ── Mobile layout ──────────────────────────────────────────────────────────
+    // ── Mobile layout ─────────────────────────────────────────────────────────
     if (isMobile) {
         return (
-            <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E8E4DF] shadow-sm">
+            <header
+                className={cn(
+                    'fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E8E4DF] shadow-sm',
+                    'transition-all duration-300 ease-in-out',
+                    mobileVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0',
+                )}
+            >
                 <div className="flex items-center justify-between px-4 py-2">
-                    {/* Logo */}
                     <RoamioLogo dark />
-
                     <button
                         onClick={() => setMobileOpen(!mobileOpen)}
                         aria-label="Toggle menu"
@@ -138,7 +179,6 @@ export default function Header() {
                     </button>
                 </div>
 
-                {/* Mobile dropdown */}
                 {mobileOpen && (
                     <div className="bg-white border-t border-[#E8E4DF] shadow-lg px-4 pb-5 pt-3 flex flex-col gap-1 animate-fade-in">
                         {navLinks.map((item) => (
@@ -173,7 +213,7 @@ export default function Header() {
         )
     }
 
-    // ── Desktop layout ─────────────────────────────────────────────────────────
+    // ── Desktop layout ────────────────────────────────────────────────────────
     return (
         <div className="fixed top-0 left-0 z-50 w-full transition-all duration-300 flex justify-center">
             <div
@@ -184,20 +224,12 @@ export default function Header() {
                         : 'bg-transparent max-w-7xl px-8 py-5',
                 )}
             >
-                {/* Logo */}
                 <RoamioLogo dark={visible} />
-
-                {/* Nav items */}
                 <NavItems items={navLinks} dark={visible} />
-
-                {/* Right actions */}
                 <div className="flex items-center gap-3">
                     <button
                         onClick={toggleLang}
-                        className={cn(
-                            'flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-[#C9A84C]',
-                            visible ? 'text-[#6B7280]' : 'text-[#6B7280]',
-                        )}
+                        className="flex items-center gap-1.5 text-sm font-medium text-[#6B7280] transition-colors hover:text-[#C9A84C]"
                         aria-label="Toggle language"
                     >
                         <Globe size={16} />
@@ -212,29 +244,5 @@ export default function Header() {
                 </div>
             </div>
         </div>
-    )
-}
-
-// ─── Logo component ──────────────────────────────────────────────────────────
-function RoamioLogo({ dark }: { dark?: boolean }) {
-    const pathname = usePathname()
-    return (
-        <Link
-            href="/"
-            className="flex items-center gap-2 group"
-            onClick={(e) => {
-                if (pathname === '/') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' })
-                    e.preventDefault()
-                }
-            }}
-        >
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#0D6E6E] flex items-center justify-center shadow-sm">
-                <span className="text-white text-xs sm:text-sm font-bold">R</span>
-            </div>
-            <span className={cn('text-lg sm:text-xl font-bold tracking-tight transition-colors', dark ? 'text-[#0D6E6E]' : 'text-[#1C1C1E]')}>
-                Roamio
-            </span>
-        </Link>
     )
 }

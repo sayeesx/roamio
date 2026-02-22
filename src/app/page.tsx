@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle, Users, Heart, Plane, Star, Shield, Lock, MapPi
 import { SectionContainer, SectionHeading } from '@/components/ui/SectionContainer'
 import { CTAButton } from '@/components/ui/CTAButton'
 import { FeatureCard, StepIndicator } from '@/components/ui/Cards'
+import { TestimonialCard } from '@/components/ui/TestimonialCard'
 import { CountUpStats } from '@/components/ui/CountUpStats'
 import type { Metadata } from 'next'
 
@@ -287,23 +288,15 @@ export default function HomePage() {
           title="What Our Visitors Say"
           subtitle="Real experiences from people we've guided through Kerala."
         />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {testimonials.map((t) => (
-            <div
+            <TestimonialCard
               key={t.author}
-              className="bg-white rounded-2xl p-5 sm:p-8 border border-[#E8E4DF] hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="flex gap-1 mb-3 sm:mb-5">
-                {Array.from({ length: t.rating }).map((_, i) => (
-                  <Star key={i} size={14} className="fill-[#C9A84C] text-[#C9A84C]" />
-                ))}
-              </div>
-              <p className="text-[#1C1C1E] text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 italic">&ldquo;{t.quote}&rdquo;</p>
-              <div>
-                <p className="font-semibold text-[#1C1C1E] text-sm sm:text-base">{t.author}</p>
-                <p className="text-xs sm:text-sm text-[#6B7280]">{t.role}</p>
-              </div>
-            </div>
+              quote={t.quote}
+              author={t.author}
+              role={t.role}
+              rating={t.rating}
+            />
           ))}
         </div>
       </SectionContainer>

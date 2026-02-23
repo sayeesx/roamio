@@ -2,11 +2,16 @@
 
 import { Suspense, useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { ArrowRight, ArrowLeft, CheckCircle, Loader2, HeartPulse, Plane, Users, Layers, Car, Hotel, FileText } from 'lucide-react'
+import { ArrowRight, ArrowLeft, CheckCircle, XCircle, Loader2, HeartPulse, Plane, Users, Layers, Car, Hotel, FileText, Globe } from 'lucide-react'
 import { submitBooking } from '@/lib/api'
+import { CountrySelect } from '@/components/ui/form/CountrySelect'
+import { TravelDatePicker } from '@/components/ui/form/TravelDatePicker'
+import { PhoneInput } from '@/components/ui/form/PhoneInput'
+import emailjs from '@emailjs/browser'
+import { motion, AnimatePresence } from 'framer-motion'
 
 /* ——— Zod Schemas ——— */
 const step1Schema = z.object({
@@ -25,6 +30,7 @@ const medicalSchema = z.object({
 })
 
 const tourismSchema = z.object({
+    country: z.string().min(2, 'Required'),
     travelers: z.string().min(1, 'Required'),
     budget: z.string().min(1, 'Required'),
     interests: z.string().min(2, 'Required'),
@@ -43,6 +49,11 @@ const contactSchema = z.object({
     phone: z.string().min(7, 'Enter a valid phone number'),
     country: z.string().min(2, 'Required'),
 })
+
+type MedicalFormData = z.infer<typeof medicalSchema>
+type TourismFormData = z.infer<typeof tourismSchema>
+type NRIFormData = z.infer<typeof nriSchema>
+type ContactFormData = z.infer<typeof contactSchema>
 
 type Purpose = 'medical' | 'tourism' | 'nri' | 'hybrid' | 'cab' | 'hotel' | 'logistics' | 'service'
 
@@ -86,12 +97,16 @@ function IntakeForm() {
     const s1 = useForm({ resolver: zodResolver(step1Schema), defaultValues: { purpose: 'medical' as Purpose } })
 
     /* — Step 2 Forms — */
-    const medForm = useForm({ resolver: zodResolver(medicalSchema) })
-    const tourForm = useForm({ resolver: zodResolver(tourismSchema) })
-    const nriForm = useForm({ resolver: zodResolver(nriSchema) })
+    const medForm = useForm<MedicalFormData>({ resolver: zodResolver(medicalSchema) })
+    const tourForm = useForm<TourismFormData>({ resolver: zodResolver(tourismSchema) })
+    const nriForm = useForm<NRIFormData>({ resolver: zodResolver(nriSchema) })
 
     /* — Step 3 Form — */
-    const contactForm = useForm({ resolver: zodResolver(contactSchema) })
+    const contactForm = useForm<ContactFormData>({
+        resolver: zodResolver(contactSchema),
+        defaultValues: { name: '', email: '', phone: '', country: '' }
+    })
+    const selectedCountry = contactForm.watch('country')
 
     const totalSteps = 4
 
@@ -102,17 +117,62 @@ function IntakeForm() {
 
     const handleStep2 = async (data: Record<string, string>) => {
         setDetails(data)
+        // Auto-fill Step 3 if country was provided in Step 2
+        if (data.country) {
+            contactForm.setValue('country', data.country)
+        }
         setStep(3)
     }
 
-    const handleStep3 = async (contact: z.infer<typeof contactSchema>) => {
+    const handleStep3 = async (contact: ContactFormData) => {
         setSubmitting(true)
         setError(null)
+        console.log('Submitting booking payload:', { purpose, details, contact })
         try {
-            await submitBooking({ purpose, details, contact })
+            const result = await submitBooking({ purpose, details, contact })
+            console.log('Submission result:', result)
+
+            // Format details for the email
+            const formattedDetails = Object.entries(details)
+                .map(([key, val]) => {
+                    const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())
+                    return `<li><strong>${label}:</strong> ${val}</li>`
+                })
+                .join('')
+
+            // EmailJS verification email
+            const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+            const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+            const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+
+            console.log('EmailJS Config:', { serviceId, templateId, hasKey: !!publicKey })
+
+            if (serviceId && templateId && publicKey) {
+                try {
+                    await emailjs.send(
+                        serviceId,
+                        templateId,
+                        {
+                            to_name: contact.name,
+                            to_email: contact.email,
+                            purpose_label: purposeOptions.find(o => o.value === purpose)?.label,
+                            trip_details: `<ul>${formattedDetails}</ul>`,
+                            message: `An agent will be in touch with you shortly to finalize your ${purposeOptions.find(o => o.value === purpose)?.label} plan.`,
+                        },
+                        publicKey
+                    )
+                } catch (emailErr: any) {
+                    console.error('EmailJS direct error:', emailErr?.text || emailErr?.message || emailErr)
+                }
+            } else {
+                console.warn('EmailJS keys missing in environment.')
+            }
+
             setStep(4)
-        } catch {
-            setError('Something went wrong. Please try again or contact us directly.')
+        } catch (err: any) {
+            console.error('Critical booking error:', err)
+            setError(err.message || 'Something went wrong. Please try again or contact us directly.')
+            setStep(5) // Step 5 for failure
         } finally {
             setSubmitting(false)
         }
@@ -178,7 +238,7 @@ function IntakeForm() {
                                     ))}
                                 </div>
                                 {s1.formState.errors.purpose && <p className={errorCls}>{s1.formState.errors.purpose.message}</p>}
-                                <button type="submit" className="w-full py-3.5 rounded-xl font-semibold text-white gradient-primary hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                                <button suppressHydrationWarning type="submit" className="w-full py-3.5 rounded-xl font-semibold text-white gradient-primary hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
                                     Continue <ArrowRight size={18} />
                                 </button>
                             </form>
@@ -191,14 +251,21 @@ function IntakeForm() {
                                 <p className="text-[#6B7280] mb-8">Share your situation so we can match you with the right hospital and specialists.</p>
                                 <div className="space-y-5">
                                     <div>
-                                        <label className={labelCls}>Country of Residence</label>
-                                        <input className={inputCls} placeholder="e.g. United Arab Emirates" {...medForm.register('country')} />
-                                        {medForm.formState.errors.country && <p className={errorCls}>{medForm.formState.errors.country.message}</p>}
+                                        <Controller
+                                            name="country"
+                                            control={medForm.control}
+                                            render={({ field }) => (
+                                                <CountrySelect
+                                                    label="Country of Residence"
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    error={medForm.formState.errors.country?.message}
+                                                />
+                                            )}
+                                        />
                                     </div>
                                     <div>
-                                        <label className={labelCls}>Intended Travel Dates</label>
-                                        <input className={inputCls} placeholder="e.g. March 10 – March 30, 2026" {...medForm.register('travelDates')} />
-                                        {medForm.formState.errors.travelDates && <p className={errorCls}>{medForm.formState.errors.travelDates.message}</p>}
+                                        <TravelDatePicker label="Intended Travel Dates" error={medForm.formState.errors.travelDates?.message} {...medForm.register('travelDates')} />
                                     </div>
                                     <div>
                                         <label className={labelCls}>Condition / Purpose of Visit</label>
@@ -231,10 +298,10 @@ function IntakeForm() {
                                     </div>
                                 </div>
                                 <div className="flex gap-3 mt-8">
-                                    <button type="button" onClick={() => setStep(1)} className="flex items-center gap-2 px-5 py-3 rounded-xl border border-[#E8E4DF] text-[#6B7280] text-sm font-medium hover:border-[#0D6E6E] transition-colors">
+                                    <button suppressHydrationWarning type="button" onClick={() => setStep(1)} className="flex items-center gap-2 px-5 py-3 rounded-xl border border-[#E8E4DF] text-[#6B7280] text-sm font-medium hover:border-[#0D6E6E] transition-colors">
                                         <ArrowLeft size={16} /> Back
                                     </button>
-                                    <button type="submit" className="flex-1 py-3.5 rounded-xl font-semibold text-white gradient-primary hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                                    <button suppressHydrationWarning type="submit" className="flex-1 py-3.5 rounded-xl font-semibold text-white gradient-primary hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
                                         Continue <ArrowRight size={18} />
                                     </button>
                                 </div>
@@ -247,6 +314,20 @@ function IntakeForm() {
                                 <h2 className="text-2xl font-bold text-[#1C1C1E] mb-2">Travel Preferences</h2>
                                 <p className="text-[#6B7280] mb-8">Help us understand your travel style so we can build the perfect Kerala itinerary.</p>
                                 <div className="space-y-5">
+                                    <div>
+                                        <Controller
+                                            name="country"
+                                            control={tourForm.control}
+                                            render={({ field }) => (
+                                                <CountrySelect
+                                                    label="Country of Residence"
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    error={tourForm.formState.errors.country?.message}
+                                                />
+                                            )}
+                                        />
+                                    </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>
                                             <label className={labelCls}>Number of Travelers</label>
@@ -274,16 +355,14 @@ function IntakeForm() {
                                         {tourForm.formState.errors.interests && <p className={errorCls}>{tourForm.formState.errors.interests.message}</p>}
                                     </div>
                                     <div>
-                                        <label className={labelCls}>Travel Dates</label>
-                                        <input className={inputCls} placeholder="e.g. April 5 – April 14, 2026" {...tourForm.register('travelDates')} />
-                                        {tourForm.formState.errors.travelDates && <p className={errorCls}>{tourForm.formState.errors.travelDates.message}</p>}
+                                        <TravelDatePicker label="Travel Dates" error={tourForm.formState.errors.travelDates?.message} {...tourForm.register('travelDates')} />
                                     </div>
                                 </div>
                                 <div className="flex gap-3 mt-8">
-                                    <button type="button" onClick={() => setStep(1)} className="flex items-center gap-2 px-5 py-3 rounded-xl border border-[#E8E4DF] text-[#6B7280] text-sm font-medium hover:border-[#0D6E6E] transition-colors">
+                                    <button suppressHydrationWarning type="button" onClick={() => setStep(1)} className="flex items-center gap-2 px-5 py-3 rounded-xl border border-[#E8E4DF] text-[#6B7280] text-sm font-medium hover:border-[#0D6E6E] transition-colors">
                                         <ArrowLeft size={16} /> Back
                                     </button>
-                                    <button type="submit" className="flex-1 py-3.5 rounded-xl font-semibold text-white gradient-primary hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                                    <button suppressHydrationWarning type="submit" className="flex-1 py-3.5 rounded-xl font-semibold text-white gradient-primary hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
                                         Continue <ArrowRight size={18} />
                                     </button>
                                 </div>
@@ -297,9 +376,18 @@ function IntakeForm() {
                                 <p className="text-[#6B7280] mb-8">Tell us about your upcoming Kerala visit so we can maximize every day.</p>
                                 <div className="space-y-5">
                                     <div>
-                                        <label className={labelCls}>Country of Residence</label>
-                                        <input className={inputCls} placeholder="e.g. United Kingdom" {...nriForm.register('country')} />
-                                        {nriForm.formState.errors.country && <p className={errorCls}>{nriForm.formState.errors.country.message}</p>}
+                                        <Controller
+                                            name="country"
+                                            control={nriForm.control}
+                                            render={({ field }) => (
+                                                <CountrySelect
+                                                    label="Country of Residence"
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    error={nriForm.formState.errors.country?.message}
+                                                />
+                                            )}
+                                        />
                                     </div>
                                     <div>
                                         <label className={labelCls}>Duration of Visit</label>
@@ -316,10 +404,10 @@ function IntakeForm() {
                                     </div>
                                 </div>
                                 <div className="flex gap-3 mt-8">
-                                    <button type="button" onClick={() => setStep(1)} className="flex items-center gap-2 px-5 py-3 rounded-xl border border-[#E8E4DF] text-[#6B7280] text-sm font-medium hover:border-[#0D6E6E] transition-colors">
+                                    <button suppressHydrationWarning type="button" onClick={() => setStep(1)} className="flex items-center gap-2 px-5 py-3 rounded-xl border border-[#E8E4DF] text-[#6B7280] text-sm font-medium hover:border-[#0D6E6E] transition-colors">
                                         <ArrowLeft size={16} /> Back
                                     </button>
-                                    <button type="submit" className="flex-1 py-3.5 rounded-xl font-semibold text-white gradient-primary hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                                    <button suppressHydrationWarning type="submit" className="flex-1 py-3.5 rounded-xl font-semibold text-white gradient-primary hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
                                         Continue <ArrowRight size={18} />
                                     </button>
                                 </div>
@@ -343,24 +431,45 @@ function IntakeForm() {
                                         {contactForm.formState.errors.email && <p className={errorCls}>{contactForm.formState.errors.email.message}</p>}
                                     </div>
                                     <div>
-                                        <label className={labelCls}>Phone / WhatsApp</label>
-                                        <input className={inputCls} placeholder="+971 50 123 4567" {...contactForm.register('phone')} />
-                                        {contactForm.formState.errors.phone && <p className={errorCls}>{contactForm.formState.errors.phone.message}</p>}
+                                        <Controller
+                                            name="phone"
+                                            control={contactForm.control}
+                                            render={({ field }) => (
+                                                <PhoneInput
+                                                    label="Phone / WhatsApp"
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    onBlur={field.onBlur}
+                                                    error={contactForm.formState.errors.phone?.message}
+                                                    selectedCountryName={selectedCountry}
+                                                />
+                                            )}
+                                        />
                                     </div>
                                     <div>
-                                        <label className={labelCls}>Country</label>
-                                        <input className={inputCls} placeholder="United Arab Emirates" {...contactForm.register('country')} />
-                                        {contactForm.formState.errors.country && <p className={errorCls}>{contactForm.formState.errors.country.message}</p>}
+                                        <Controller
+                                            name="country"
+                                            control={contactForm.control}
+                                            render={({ field }) => (
+                                                <CountrySelect
+                                                    label="Country"
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    error={contactForm.formState.errors.country?.message}
+                                                />
+                                            )}
+                                        />
                                     </div>
                                 </div>
                                 {error && (
                                     <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">{error}</div>
                                 )}
                                 <div className="flex gap-3 mt-8">
-                                    <button type="button" onClick={() => setStep(2)} className="flex items-center gap-2 px-5 py-3 rounded-xl border border-[#E8E4DF] text-[#6B7280] text-sm font-medium hover:border-[#0D6E6E] transition-colors">
+                                    <button suppressHydrationWarning type="button" onClick={() => setStep(2)} className="flex items-center gap-2 px-5 py-3 rounded-xl border border-[#E8E4DF] text-[#6B7280] text-sm font-medium hover:border-[#0D6E6E] transition-colors">
                                         <ArrowLeft size={16} /> Back
                                     </button>
                                     <button
+                                        suppressHydrationWarning
                                         type="submit"
                                         disabled={submitting}
                                         className="flex-1 py-3.5 rounded-xl font-semibold text-white gradient-primary hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-60"
@@ -371,25 +480,52 @@ function IntakeForm() {
                             </form>
                         )}
 
-                        {/* ——— Step 4: Confirmation ——— */}
+                        {/* ——— Step 4: Confirmation (Success) ——— */}
                         {step === 4 && (
                             <div className="text-center py-8">
-                                <div className="w-20 h-20 rounded-full gradient-primary flex items-center justify-center mx-auto mb-6">
+                                <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                                    className="w-20 h-20 rounded-full gradient-primary flex items-center justify-center mx-auto mb-6"
+                                >
                                     <CheckCircle size={40} className="text-white" />
-                                </div>
-                                <h2 className="text-2xl font-bold text-[#1C1C1E] mb-3">Your Request is Submitted!</h2>
-                                <p className="text-[#6B7280] leading-relaxed mb-4 max-w-md mx-auto">
-                                    Our AI is generating your personalized Kerala plan. You&apos;ll receive it via email within <strong>24–48 hours</strong>.
+                                </motion.div>
+                                <h2 className="text-2xl font-bold text-[#1C1C1E] mb-3">Your Request is Sent!</h2>
+                                <p className="text-[#6B7280] leading-relaxed mb-8 max-w-md mx-auto">
+                                    Your request has been sent, our agent will be in contact with you soon...
                                 </p>
-                                <div className="flex items-center justify-center gap-2 bg-[#0D6E6E]/5 rounded-xl px-6 py-4 mb-8 max-w-xs mx-auto">
-                                    <Loader2 size={18} className="animate-spin text-[#0D6E6E]" />
-                                    <p className="text-sm text-[#0D6E6E] font-medium">AI is generating your plan...</p>
-                                </div>
                                 <button
+                                    suppressHydrationWarning
                                     onClick={() => router.push('/dashboard')}
                                     className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white gradient-primary hover:opacity-90 transition-opacity text-sm"
                                 >
                                     View My Dashboard <ArrowRight size={16} />
+                                </button>
+                            </div>
+                        )}
+
+                        {/* ——— Step 5: Failure ——— */}
+                        {step === 5 && (
+                            <div className="text-center py-8">
+                                <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                                    className="w-20 h-20 rounded-full bg-red-500 flex items-center justify-center mx-auto mb-6"
+                                >
+                                    <XCircle size={40} className="text-white" />
+                                </motion.div>
+                                <h2 className="text-2xl font-bold text-[#1C1C1E] mb-3">Submission Failed</h2>
+                                <p className="text-[#6B7280] leading-relaxed mb-8 max-w-md mx-auto">
+                                    {error || 'Something went wrong. Please try again or contact us directly.'}
+                                </p>
+                                <button
+                                    suppressHydrationWarning
+                                    onClick={() => setStep(3)}
+                                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white gradient-primary hover:opacity-90 transition-opacity text-sm"
+                                >
+                                    Try Again <ArrowLeft size={16} />
                                 </button>
                             </div>
                         )}

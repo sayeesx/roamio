@@ -57,6 +57,11 @@ const bookingSchema = z.object({
 
 // ─── POST handler ────────────────────────────────────────────
 export async function POST(request: Request) {
+    console.log('[/api/bookings] Environment Check:', {
+        hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+        hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    })
     try {
         // Rate limiting
         const forwarded = request.headers.get('x-forwarded-for')
@@ -70,6 +75,7 @@ export async function POST(request: Request) {
 
         // Parse & validate body
         const body = await request.json()
+        console.log('[/api/bookings] Incoming body:', JSON.stringify(body, null, 2))
 
         // Bot validation
         if (process.env.TURNSTILE_SECRET_KEY) {
@@ -81,6 +87,7 @@ export async function POST(request: Request) {
 
         const parsed = bookingSchema.safeParse(body)
         if (!parsed.success) {
+            console.error('[/api/bookings] Validation failed:', parsed.error.flatten().fieldErrors)
             return NextResponse.json(
                 { error: 'Invalid input', issues: parsed.error.flatten().fieldErrors },
                 { status: 400 },
@@ -175,10 +182,10 @@ export async function POST(request: Request) {
         })
 
         return response
-    } catch (error) {
+    } catch (error: any) {
         console.error('[/api/bookings] Unexpected error:', error)
         return NextResponse.json(
-            { error: 'Internal server error' },
+            { error: 'Internal server error', message: error.message, stack: error.stack },
             { status: 500 },
         )
     }

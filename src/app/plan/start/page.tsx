@@ -5,12 +5,15 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { ArrowRight, ArrowLeft, CheckCircle, Loader2, HeartPulse, Plane, Users, Layers } from 'lucide-react'
-import { submitIntake } from '@/lib/api'
+import { ArrowRight, ArrowLeft, CheckCircle, Loader2, HeartPulse, Plane, Users, Layers, Car, Hotel, FileText } from 'lucide-react'
+import { submitBooking } from '@/lib/api'
 
 /* ——— Zod Schemas ——— */
 const step1Schema = z.object({
-    purpose: z.enum(['medical', 'tourism', 'nri', 'hybrid'], { message: 'Please select a purpose' }),
+    purpose: z.enum([
+        'medical', 'tourism', 'nri', 'hybrid',
+        'cab', 'hotel', 'logistics', 'service',
+    ], { message: 'Please select a purpose' }),
 })
 
 const medicalSchema = z.object({
@@ -41,13 +44,17 @@ const contactSchema = z.object({
     country: z.string().min(2, 'Required'),
 })
 
-type Purpose = 'medical' | 'tourism' | 'nri' | 'hybrid'
+type Purpose = 'medical' | 'tourism' | 'nri' | 'hybrid' | 'cab' | 'hotel' | 'logistics' | 'service'
 
 const purposeOptions = [
     { value: 'medical', label: 'Medical Visit', desc: 'Hospital treatment, Ayurveda, health check-ups', icon: <HeartPulse size={28} /> },
     { value: 'tourism', label: 'Tourism', desc: 'Leisure travel, backwaters, cultural experiences', icon: <Plane size={28} /> },
     { value: 'nri', label: 'NRI Visit', desc: 'Short homecoming, family logistics, property visits', icon: <Users size={28} /> },
-    { value: 'hybrid', label: 'Hybrid', desc: 'Combination of medical care and tourism', icon: <Layers size={28} /> },
+    { value: 'hybrid', label: 'Hybrid', desc: 'Medical care + Tourism combo', icon: <Layers size={28} /> },
+    { value: 'cab', label: 'Cab & Transport', desc: 'Airport transfers, local commute, inter-city', icon: <Car size={28} /> },
+    { value: 'hotel', label: 'Hotel & Stays', desc: 'Luxury resorts, budget stays, medical-adjacent', icon: <Hotel size={28} /> },
+    { value: 'logistics', label: 'Logistics', desc: 'Cargo, courier, personal errands', icon: <FileText size={28} /> },
+    { value: 'service', label: 'Other Service', desc: 'Visa guidance, appointments, etc.', icon: <CheckCircle size={28} /> },
 ]
 
 const inputCls = 'w-full rounded-xl border border-[#E8E4DF] px-4 py-3 text-sm bg-white text-[#1C1C1E] placeholder-[#9CA3AF] focus:outline-none focus:border-[#0D6E6E] focus:ring-2 focus:ring-[#0D6E6E]/10 transition-all'
@@ -63,10 +70,16 @@ function IntakeForm() {
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    // Pre-select purpose from URL ?purpose=medical|tourism|nri
+    // Pre-select purpose from URL ?purpose=... or ?service=...
     useEffect(() => {
-        const p = searchParams.get('purpose') as Purpose | null
-        if (p && ['medical', 'tourism', 'nri', 'hybrid'].includes(p)) setPurpose(p)
+        const p = searchParams.get('purpose')
+        const s = searchParams.get('service')
+        const val = (p || s) as Purpose | null
+
+        const validPurposes = purposeOptions.map(o => o.value)
+        if (val && validPurposes.includes(val)) {
+            setPurpose(val)
+        }
     }, [searchParams])
 
     /* — Step 1 Form — */
@@ -96,7 +109,7 @@ function IntakeForm() {
         setSubmitting(true)
         setError(null)
         try {
-            await submitIntake({ purpose, details, contact })
+            await submitBooking({ purpose, details, contact })
             setStep(4)
         } catch {
             setError('Something went wrong. Please try again or contact us directly.')
@@ -141,9 +154,9 @@ function IntakeForm() {
                             <form onSubmit={s1.handleSubmit(handleStep1 as Parameters<typeof s1.handleSubmit>[0])}>
                                 <h1 className="text-2xl font-bold text-[#1C1C1E] mb-2">What brings you to Kerala?</h1>
                                 <p className="text-[#6B7280] mb-8">Select the primary purpose of your visit so we can personalize your plan.</p>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
                                     {purposeOptions.map((opt) => (
-                                        <label key={opt.value} className="cursor-pointer">
+                                        <label key={opt.value} className="cursor-pointer group">
                                             <input
                                                 type="radio"
                                                 value={opt.value}
@@ -151,15 +164,15 @@ function IntakeForm() {
                                                 className="sr-only"
                                                 onChange={() => setPurpose(opt.value as Purpose)}
                                             />
-                                            <div className={`p-5 rounded-xl border-2 transition-all hover:border-[#0D6E6E]/50 ${purpose === opt.value
+                                            <div className={`p-4 rounded-xl border-2 transition-all hover:border-[#0D6E6E]/50 h-full ${purpose === opt.value
                                                 ? 'border-[#0D6E6E] bg-[#0D6E6E]/5'
                                                 : 'border-[#E8E4DF] bg-white'
                                                 }`}>
-                                                <div className={`mb-3 ${purpose === opt.value ? 'text-[#0D6E6E]' : 'text-[#6B7280]'}`}>
+                                                <div className={`mb-2.5 ${purpose === opt.value ? 'text-[#0D6E6E]' : 'text-[#6B7280]'}`}>
                                                     {opt.icon}
                                                 </div>
-                                                <h3 className="font-bold text-[#1C1C1E] mb-1">{opt.label}</h3>
-                                                <p className="text-xs text-[#6B7280] leading-relaxed">{opt.desc}</p>
+                                                <h3 className="font-bold text-[#1C1C1E] text-sm mb-1">{opt.label}</h3>
+                                                <p className="text-[10px] text-[#6B7280] leading-tight">{opt.desc}</p>
                                             </div>
                                         </label>
                                     ))}

@@ -15,7 +15,7 @@ api.interceptors.request.use((config) => {
 })
 
 export interface IntakePayload {
-    purpose: 'medical' | 'tourism' | 'nri' | 'hybrid'
+    purpose: 'medical' | 'tourism' | 'nri' | 'hybrid' | 'cab' | 'hotel' | 'logistics' | 'service'
     details: Record<string, unknown>
     contact: {
         name: string
@@ -38,4 +38,9 @@ export async function getUserPlan(userId: string) {
 export async function getStatus(userId: string) {
     const res = await api.get(`/api/status/${userId}`)
     return res.data as { status: 'pending' | 'confirmed' | 'in_progress' | 'completed' }
+}
+
+export async function submitBooking(data: IntakePayload) {
+    const res = await api.post('/api/bookings', data)
+    return res.data as { success: boolean; bookingId: string; message: string }
 }

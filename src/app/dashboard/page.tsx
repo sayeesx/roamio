@@ -1,6 +1,7 @@
 import { Download, MessageCircle, FileText, Building2, BedDouble, Map, Wallet } from 'lucide-react'
 import { SectionContainer } from '@/components/ui/SectionContainer'
 import { StatusBadge } from '@/components/ui/Cards'
+import RealtimeBookings from '@/components/dashboard/RealtimeBookings'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -80,6 +81,11 @@ export default function DashboardPage() {
                             </div>
                         ))}
                     </div>
+                </div>
+
+                {/* Live bookings from Supabase Realtime */}
+                <div className="mb-6">
+                    <RealtimeBookings />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">

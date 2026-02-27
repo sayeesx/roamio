@@ -5,8 +5,8 @@ import { FeatureCard, StepIndicator } from '@/components/ui/Cards'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Flight Ticket Assistance — Roamio Kerala',
-    description: 'Roamio helps you find and book the best flights to Kerala. We compare options, assist with bookings, and coordinate your arrival — all as part of your Kerala visit plan.',
+    title: 'Flight Ticket Assistance — Shahr Kerala',
+    description: 'Shahr helps you find and book the best flights to Kerala. We compare options, assist with bookings, and coordinate your arrival — all as part of your Kerala visit plan.',
 }
 
 const steps = [
@@ -20,7 +20,7 @@ const faqs = [
     { q: 'Do you book flights directly?', a: 'We assist and coordinate the booking process, helping you find the best options and facilitating the booking. We work with trusted travel partners for actual ticket issuance.' },
     { q: 'Which airports in Kerala do you cover?', a: 'We cover all major Kerala airports — Cochin International (COK), Calicut International (CCJ), Trivandrum International (TRV), and Kannur International (CNN).' },
     { q: 'Can you help with connecting flights?', a: 'Yes, we can help plan multi-leg itineraries including international connections, layovers, and codeshare flights.' },
-    { q: 'Is there a fee for this service?', a: 'Flight assistance is included as part of a full Roamio plan. For standalone flight-only requests, contact us and we will advise on applicable coordination fees.' },
+    { q: 'Is there a fee for this service?', a: 'Flight assistance is included as part of a full Shahr plan. For standalone flight-only requests, contact us and we will advise on applicable coordination fees.' },
     { q: 'Can you arrange return tickets too?', a: 'Absolutely. We handle both outbound and return flights, and can align departure times with your Kerala itinerary.' },
 ]
 
@@ -70,7 +70,7 @@ export default function FlightsPage() {
                         { icon: <Globe size={24} />, title: 'All Origins Covered', description: 'We assist travelers arriving from the Gulf, UK, Europe, and all international hubs.' },
                         { icon: <Wallet size={24} />, title: 'Best Value Options', description: 'We compare across airlines to find competitive fares that fit your travel window.' },
                         { icon: <Clock size={24} />, title: 'Well-Timed Arrivals', description: 'We plan arrival times that align perfectly with your Kerala itinerary and pickups.' },
-                        { icon: <CheckCircle size={24} />, title: 'Seamless Integration', description: 'Your flight details feed directly into your Roamio plan — no gap, no confusion.' },
+                        { icon: <CheckCircle size={24} />, title: 'Seamless Integration', description: 'Your flight details feed directly into your Shahr plan — no gap, no confusion.' },
                     ].map((item) => (
                         <FeatureCard key={item.title} icon={item.icon} title={item.title} description={item.description} />
                     ))}

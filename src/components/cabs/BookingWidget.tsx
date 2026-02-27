@@ -96,7 +96,7 @@ export function BookingWidget({
   return (
     <div className={cn('space-y-6', className)}>
       {/* Booking Form Card */}
-      <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-white/50 shadow-xl shadow-black/5 p-6 sm:p-8">
+      <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-white/50 p-6 sm:p-8">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 rounded-xl bg-[#0D6E6E] flex items-center justify-center">
@@ -281,7 +281,7 @@ export function BookingWidget({
           className={cn(
             'w-full py-4 px-6 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300',
             isFormValid && !isSearching
-              ? 'bg-[#C9A84C] text-white hover:bg-[#b8962f] shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+              ? 'bg-[#C9A84C] text-white hover:bg-[#b8962f] hover:-translate-y-0.5'
               : 'bg-[#E8E4DF] text-[#6B7280] cursor-not-allowed'
           )}
         >

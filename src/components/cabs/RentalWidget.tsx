@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react'
 import { Search, MapPin, Car, Bike, Zap, Fuel, Droplets, Flame, Calendar, Clock, Filter, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { LocationSearch } from './LocationSearch'
 import { RentalBookingModal } from './RentalBookingModal'
@@ -113,7 +114,7 @@ export function RentalWidget() {
   return (
     <div className="space-y-6">
       {/* Search & Filter Bar */}
-      <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-white/50 shadow-lg p-4 sm:p-6">
+      <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-white/50 p-4 sm:p-6">
         {/* Single Row Layout */}
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {/* Location Search */}
@@ -216,7 +217,7 @@ export function RentalWidget() {
             className={cn(
               'flex-1 py-3 px-6 rounded-xl font-bold flex items-center justify-center gap-2 transition-all duration-300',
               isFormValid && !isSearching
-                ? 'bg-[#C9A84C] text-white hover:bg-[#b8962f] shadow-lg hover:shadow-xl'
+                ? 'bg-[#C9A84C] text-white hover:bg-[#b8962f]'
                 : 'bg-[#E8E4DF] text-[#6B7280] cursor-not-allowed'
             )}
           >
@@ -320,13 +321,25 @@ export function RentalWidget() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden hover:border-[#0D6E6E]/30 hover:shadow-lg transition-all group"
+                  className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden hover:border-[#0D6E6E]/30 transition-all group"
                 >
-                  {/* Vehicle Image Placeholder */}
-                  <div className="relative aspect-[4/3] bg-gradient-to-br from-[#F2EFE9] to-[#E8E4DF] flex items-center justify-center">
-                    {vehicle.type === 'car' && <Car size={48} className="text-[#0D6E6E]/40" />}
-                    {vehicle.type === 'bike' && <Bike size={48} className="text-[#0D6E6E]/40" />}
-                    {vehicle.type === 'bicycle' && <Zap size={48} className="text-[#0D6E6E]/40" />}
+                  {/* Vehicle Image */}
+                  <div className="relative aspect-[4/3] bg-gradient-to-br from-[#F2EFE9] to-[#E8E4DF] flex items-center justify-center overflow-hidden">
+                    {vehicle.image_url ? (
+                      <Image
+                        src={vehicle.image_url}
+                        alt={vehicle.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center">
+                        {vehicle.type === 'car' && <Car size={48} className="text-[#0D6E6E]/40" />}
+                        {vehicle.type === 'bike' && <Bike size={48} className="text-[#0D6E6E]/40" />}
+                        {vehicle.type === 'bicycle' && <Zap size={48} className="text-[#0D6E6E]/40" />}
+                      </div>
+                    )}
                     
                     <div className="absolute top-3 left-3">
                       <span className={cn(

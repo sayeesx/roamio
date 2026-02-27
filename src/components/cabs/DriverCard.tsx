@@ -71,8 +71,8 @@ export function DriverCard({
         className={cn(
           'bg-white rounded-2xl border-2 overflow-hidden transition-all duration-300',
           isSelected 
-            ? 'border-[#0D6E6E] shadow-lg shadow-[#0D6E6E]/10' 
-            : 'border-[#E8E4DF] hover:border-[#0D6E6E]/30 hover:shadow-md',
+            ? 'border-[#0D6E6E]' 
+            : 'border-[#E8E4DF] hover:border-[#0D6E6E]/30',
           'cursor-pointer',
           className
         )}
@@ -80,19 +80,25 @@ export function DriverCard({
       >
       {/* Vehicle Image - Better aspect ratio for alignment */}
       <div className="relative aspect-[16/9] bg-[#F2EFE9] overflow-hidden">
-        <Image
-          src={vehicle_image}
-          alt={`${brand} ${model}`}
-          fill
-          className="object-cover"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        />
+        {vehicle_image ? (
+          <Image
+            src={vehicle_image}
+            alt={`${brand} ${model}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Car size={64} className="text-[#0D6E6E]/30" />
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         
         {/* Vehicle Type Badge - Better positioning */}
         <div className="absolute top-3 left-3 z-10">
           <span className={cn(
-            'px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-md shadow-sm',
+            'px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-md',
             vehicle_type === 'Luxury' 
               ? 'bg-[#C9A84C] text-white'
               : 'bg-white/95 text-[#0D6E6E]'
@@ -104,7 +110,7 @@ export function DriverCard({
         {/* AC Badge */}
         {has_ac && (
           <div className="absolute top-3 right-3 z-10">
-            <span className="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-[#0D6E6E] text-white backdrop-blur-md flex items-center gap-1 shadow-sm">
+            <span className="px-2.5 py-1.5 rounded-full text-xs font-semibold bg-[#0D6E6E] text-white backdrop-blur-md flex items-center gap-1">
               <Wind size={12} />
               AC
             </span>
@@ -122,10 +128,10 @@ export function DriverCard({
       </div>
 
       {/* Driver Info - Better spacing and alignment */}
-      <div className="p-4 sm:p-5">
+      <div className="p-3 sm:p-5">
         {/* Driver Header - Better alignment */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#E8E4DF] flex-shrink-0 bg-[#F2EFE9]">
+        <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+          <div className="relative w-9 h-9 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#E8E4DF] flex-shrink-0 bg-[#F2EFE9]">
             <Image
               src={profile_image_url}
               alt={full_name}
@@ -135,17 +141,17 @@ export function DriverCard({
             />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-bold text-[#1C1C1E] text-sm sm:text-base truncate">{full_name}</h3>
-              <CheckCircle size={16} className="text-[#0D6E6E] flex-shrink-0" />
+            <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+              <h3 className="font-bold text-[#1C1C1E] text-xs sm:text-base truncate">{full_name}</h3>
+              <CheckCircle size={14} className="text-[#0D6E6E] flex-shrink-0 sm:w-4 sm:h-4" />
             </div>
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-[#6B7280]">
+            <div className="flex items-center gap-1 sm:gap-2 text-xs text-[#6B7280]">
               <span className="flex items-center gap-1">
-                <Star size={14} className="text-[#C9A84C] fill-[#C9A84C]" />
+                <Star size={12} className="text-[#C9A84C] fill-[#C9A84C] sm:w-3.5 sm:h-3.5" />
                 <span className="font-semibold">{rating.toFixed(1)}</span>
               </span>
               <span className="text-[#E8E4DF]">|</span>
-              <span>{total_trips.toLocaleString()} trips</span>
+              <span className="text-[10px] sm:text-xs">{total_trips.toLocaleString()} trips</span>
             </div>
           </div>
         </div>
@@ -195,15 +201,15 @@ export function DriverCard({
         )}
 
         {/* Price & Action - Better alignment */}
-        <div className="flex items-center justify-between pt-4 border-t border-[#E8E4DF]">
+        <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-[#E8E4DF]">
           <div>
-            <p className="text-xs text-[#6B7280] mb-0.5">Starting from</p>
-            <p className="text-xl sm:text-2xl font-bold text-[#0D6E6E]">₹{price_per_km.toFixed(0)}<span className="text-sm font-normal text-[#6B7280]">/km</span></p>
+            <p className="text-[10px] sm:text-xs text-[#6B7280] mb-0.5">Starting from</p>
+            <p className="text-lg sm:text-2xl font-bold text-[#0D6E6E]">₹{price_per_km.toFixed(0)}<span className="text-xs font-normal text-[#6B7280]">/km</span></p>
           </div>
           
           <button
             className={cn(
-              'px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 shadow-sm hover:shadow-md',
+              'px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm transition-all duration-200',
               isSelected
                 ? 'bg-[#0D6E6E] text-white'
                 : 'bg-[#C9A84C] text-white hover:bg-[#b8962f]'
@@ -269,7 +275,7 @@ export function DriverCardCompact({
       className={cn(
         'flex items-center gap-4 p-4 bg-white rounded-xl border-2 transition-all duration-200',
         isSelected 
-          ? 'border-[#0D6E6E] shadow-md' 
+          ? 'border-[#0D6E6E]' 
           : 'border-[#E8E4DF] hover:border-[#0D6E6E]/30',
         onSelect && 'cursor-pointer',
         className

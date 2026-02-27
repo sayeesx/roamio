@@ -10,7 +10,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'AI-Powered Medical & Travel Concierge for Kerala',
-  description: 'Roamio is your intelligent concierge for medical travel, tourism, and NRI visits to Kerala. Smart planning. Seamless coordination. Trusted execution.',
+  description: 'Shahr is your intelligent concierge for medical travel, tourism, and NRI visits to Kerala. Smart planning. Seamless coordination. Trusted execution.',
 }
 
 const howItWorks = [

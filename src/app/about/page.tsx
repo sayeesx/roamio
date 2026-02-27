@@ -4,8 +4,8 @@ import { CTAButton } from '@/components/ui/CTAButton'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'About Roamio',
-    description: 'Learn about Roamio — the AI-powered concierge platform built to connect the world with Kerala\'s best medical care and tourism experiences.',
+    title: 'About Shahr',
+    description: 'Learn about Shahr — the AI-powered concierge platform built to connect the world with Kerala\'s best medical care and tourism experiences.',
 }
 
 export default function AboutPage() {
@@ -22,10 +22,10 @@ export default function AboutPage() {
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-3xl">
                         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-[#1C1C1E] leading-[1.1] mb-5">
-                            About <span className="text-[#0D6E6E]">Roamio</span>
+                            About <span className="text-[#0D6E6E]">Shahr</span>
                         </h1>
                         <p className="text-base sm:text-xl text-[#4B5563] leading-relaxed">
-                            We built Roamio because we saw a gap: Kerala has world-class medical and tourism offerings, but no intelligent system to help visitors navigate them.
+                            We built Shahr because we saw a gap: Kerala has world-class medical and tourism offerings, but no intelligent system to help visitors navigate them.
                         </p>
                     </div>
                 </div>
@@ -36,7 +36,7 @@ export default function AboutPage() {
                     <div>
                         <SectionHeading eyebrow="Our Mission" title="Intelligent Concierge, Human Care" centered={false} />
                         <div className="space-y-5 text-[#6B7280] leading-relaxed">
-                            <p>Roamio is not a travel booking site. We are an intelligent concierge — a system that listens, plans, and executes on your behalf.</p>
+                            <p>Shahr is not a travel booking site. We are an intelligent concierge — a system that listens, plans, and executes on your behalf.</p>
                             <p>Our AI understands your needs. Our human team acts on the ground. Together, they deliver an experience that feels personal, not transactional.</p>
                             <p>We serve medical tourists seeking healing in Kerala, NRIs reconnecting with home, and international visitors who want to experience Kerala authentically and deeply.</p>
                         </div>

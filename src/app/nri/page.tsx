@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
     title: 'NRI Concierge — Smart Short-Visit Planning for Kerala',
-    description: 'Roamio helps NRIs maximize every day of their Kerala visit. Property checks, family medical appointments, weddings, legal errands — all coordinated by AI.',
+    description: 'Shahr helps NRIs maximize every day of their Kerala visit. Property checks, family medical appointments, weddings, legal errands — all coordinated by AI.',
 }
 
 const services = [
@@ -20,12 +20,12 @@ const services = [
 
 const testimonials = [
     {
-        quote: 'I had 12 days in Kerala and a list of 20 things to do. Roamio got me through all of them and I still had time to relax.',
+        quote: 'I had 12 days in Kerala and a list of 20 things to do. Shahr got me through all of them and I still had time to relax.',
         author: 'Arun Nair',
         role: 'Toronto, Canada',
     },
     {
-        quote: 'My parents needed medical check-ups, the house needed repairs, and my sister was getting married. Roamio coordinated everything while I focused on family.',
+        quote: 'My parents needed medical check-ups, the house needed repairs, and my sister was getting married. Shahr coordinated everything while I focused on family.',
         author: 'Deepa Krishnan',
         role: 'Abu Dhabi, UAE',
     },

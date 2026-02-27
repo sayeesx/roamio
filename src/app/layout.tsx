@@ -13,18 +13,18 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Roamio — AI-Powered Medical & Travel Concierge for Kerala',
-    template: '%s | Roamio',
+    default: 'Shahr — AI-Powered Medical & Travel Concierge for Kerala',
+    template: '%s | Shahr',
   },
   description:
-    'Roamio is an intelligent concierge platform for medical travel, tourism, and NRI visits to Kerala. Smart planning. Seamless coordination. Trusted execution.',
+    'Shahr is an intelligent concierge platform for medical travel, tourism, and NRI visits to Kerala. Smart planning. Seamless coordination. Trusted execution.',
   keywords: ['Kerala medical tourism', 'AI concierge', 'NRI travel', 'Ayurveda Kerala', 'medical travel India'],
   openGraph: {
     type: 'website',
     locale: 'en_US',
     alternateLocale: 'ar_AE',
-    siteName: 'Roamio',
-    title: 'Roamio — AI-Powered Medical & Travel Concierge for Kerala',
+    siteName: 'Shahr',
+    title: 'Shahr — AI-Powered Medical & Travel Concierge for Kerala',
     description: 'Smart planning. Seamless coordination. Trusted execution.',
   },
   alternates: {

@@ -189,7 +189,7 @@ function NavItems({
 }
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
-function RoamioLogo({ dark }: { dark?: boolean }) {
+function ShahrLogo({ dark }: { dark?: boolean }) {
     const pathname = usePathname()
     return (
         <Link
@@ -203,10 +203,10 @@ function RoamioLogo({ dark }: { dark?: boolean }) {
             }}
         >
             <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#0D6E6E] flex items-center justify-center shadow-sm">
-                <span className="text-white text-xs sm:text-sm font-bold">R</span>
+                <span className="text-white text-xs sm:text-sm font-bold">S</span>
             </div>
             <span className={cn('text-lg sm:text-xl font-bold tracking-tight transition-colors', dark ? 'text-[#0D6E6E]' : 'text-[#1C1C1E]')}>
-                Roamio
+                Shahr
             </span>
         </Link>
     )
@@ -265,7 +265,7 @@ export default function Header() {
                 )}
             >
                 <div className="flex items-center justify-between px-4 py-2">
-                    <RoamioLogo dark />
+                    <ShahrLogo dark />
                     <button
                         onClick={() => {
                             setMobileOpen(!mobileOpen)
@@ -382,7 +382,7 @@ export default function Header() {
                         : 'bg-transparent max-w-7xl px-8 py-5',
                 )}
             >
-                <RoamioLogo dark={visible} />
+                <ShahrLogo dark={visible} />
                 <NavItems items={navLinks} dark={visible} visible={visible} />
                 <div className="flex items-center gap-3">
                     <button

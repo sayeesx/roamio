@@ -9,7 +9,7 @@ const footerLinks = {
         { label: 'Plan My Visit', href: '/plan/start' },
     ],
     company: [
-        { label: 'About Roamio', href: '/about' },
+        { label: 'About Shahr', href: '/about' },
         { label: 'Contact Us', href: '/contact' },
         { label: 'Privacy Policy', href: '/privacy' },
         { label: 'Terms of Service', href: '/terms' },
@@ -31,9 +31,9 @@ export default function Footer() {
                     <div className="col-span-2 lg:col-span-2">
                         <Link href="/" className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                             <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg gradient-primary flex items-center justify-center">
-                                <span className="text-white text-xs sm:text-base font-bold">R</span>
+                                <span className="text-white text-xs sm:text-base font-bold">S</span>
                             </div>
-                            <span className="text-lg sm:text-2xl font-bold text-white">Roamio</span>
+                            <span className="text-lg sm:text-2xl font-bold text-white">Shahr</span>
                         </Link>
                         <p className="text-white/70 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6 max-w-xs">
                             An intelligent concierge platform for medical travel, tourism planning, and NRI visits to Kerala.
@@ -52,13 +52,13 @@ export default function Footer() {
                             </div>
                             <div className="flex items-center gap-1.5 text-xs sm:text-sm text-white/70">
                                 <Mail size={12} className="text-[#C9A84C] shrink-0" />
-                                <a href="mailto:hello@roamio.in" className="hover:text-white transition-colors">hello@roamio.in</a>
+                                <a href="mailto:hello@shahr.in" className="hover:text-white transition-colors">hello@shahr.in</a>
                             </div>
                         </div>
 
                         {/* WhatsApp CTA */}
                         <a
-                            href="https://wa.me/919999999999?text=Hi%20Roamio%2C%20I%20want%20to%20plan%20my%20visit"
+                            href="https://wa.me/919999999999?text=Hi%20Shahr%2C%20I%20want%20to%20plan%20my%20visit"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 bg-[#25D366] text-white px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold hover:bg-[#1ebe5d] transition-colors"

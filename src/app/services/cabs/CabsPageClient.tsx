@@ -9,6 +9,7 @@ import { FeatureCard, StepIndicator } from '@/components/ui/Cards'
 import { BookingWidget } from '@/components/cabs/BookingWidget'
 import { AnimatedStat } from '@/components/cabs/CountUp'
 import { RentalWidget } from '@/components/cabs/RentalWidget'
+import { BookingModal } from '@/components/cabs/BookingModal'
 import type { DriverWithVehicle } from '@/lib/supabase/cabs'
 
 interface CabsPageClientProps {
@@ -48,6 +49,8 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
   const [isSearchMode, setIsSearchMode] = useState(false)
   const [drivers, setDrivers] = useState<DriverWithVehicle[]>([])
   const [isSearching, setIsSearching] = useState(false)
+  const [selectedDriver, setSelectedDriver] = useState<DriverWithVehicle | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleSearchStart = useCallback(() => {
     setIsSearching(true)
@@ -63,6 +66,16 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
     setIsSearchMode(false)
     setDrivers([])
     setIsSearching(false)
+  }, [])
+
+  const handleDriverClick = useCallback((driver: DriverWithVehicle) => {
+    setSelectedDriver(driver)
+    setIsModalOpen(true)
+  }, [])
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false)
+    setSelectedDriver(null)
   }, [])
 
   return (
@@ -176,7 +189,7 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
                 className="grid lg:grid-cols-5 gap-6 lg:gap-8 items-start"
               >
                 {/* Left: Compact Booking Widget - 2 cols */}
-                <div className="lg:col-span-2 w-full order-2 lg:order-1">
+                <div className="lg:col-span-2 w-full order-1 lg:order-1">
                   <div className="lg:sticky lg:top-24">
                     <div className="flex items-center justify-between mb-4">
                       <button
@@ -195,7 +208,7 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
                 </div>
 
                 {/* Right: Driver Results - 3 cols */}
-                <div className="lg:col-span-3 w-full order-1 lg:order-2">
+                <div className="lg:col-span-3 w-full order-2 lg:order-2">
                   <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/50 shadow-lg p-4 sm:p-6">
                     {/* Results Header */}
                     <div className="flex items-center justify-between mb-6">
@@ -214,28 +227,29 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
 
                     {/* Drivers Grid */}
                     {!isSearching && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {drivers.map((driver) => (
                           <div 
                             key={driver.driver_id}
-                            className="bg-white rounded-xl border border-[#E8E4DF] p-4 hover:border-[#0D6E6E]/30 hover:shadow-md transition-all cursor-pointer"
+                            onClick={() => handleDriverClick(driver)}
+                            className="bg-white rounded-xl border border-[#E8E4DF] p-3 sm:p-4 hover:border-[#0D6E6E]/30 hover:shadow-md transition-all cursor-pointer"
                           >
-                            <div className="flex items-start gap-3">
-                              <div className="w-12 h-12 rounded-full bg-[#F2EFE9] flex items-center justify-center flex-shrink-0">
-                                <Car size={20} className="text-[#0D6E6E]" />
+                            <div className="flex items-start gap-2 sm:gap-3">
+                              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#F2EFE9] flex items-center justify-center flex-shrink-0">
+                                <Car size={16} className="text-[#0D6E6E] sm:w-5 sm:h-5" />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <h4 className="font-bold text-[#1C1C1E] truncate">{driver.full_name}</h4>
-                                <p className="text-sm text-[#6B7280]">{driver.brand} {driver.model}</p>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <Star size={14} className="text-[#C9A84C] fill-[#C9A84C]" />
-                                  <span className="text-sm font-medium">{driver.rating.toFixed(1)}</span>
-                                  <span className="text-xs text-[#6B7280]">• {driver.total_trips.toLocaleString()} trips</span>
+                                <h4 className="font-bold text-[#1C1C1E] text-sm truncate">{driver.full_name}</h4>
+                                <p className="text-xs text-[#6B7280]">{driver.brand} {driver.model}</p>
+                                <div className="flex items-center gap-1.5 mt-1">
+                                  <Star size={12} className="text-[#C9A84C] fill-[#C9A84C] sm:w-3.5 sm:h-3.5" />
+                                  <span className="text-xs font-medium">{driver.rating.toFixed(1)}</span>
+                                  <span className="text-[10px] sm:text-xs text-[#6B7280]">• {driver.total_trips.toLocaleString()} trips</span>
                                 </div>
                               </div>
                               <div className="text-right flex-shrink-0">
-                                <p className="text-lg font-bold text-[#0D6E6E]">₹{driver.price_per_km.toFixed(0)}</p>
-                                <p className="text-xs text-[#6B7280]">/km</p>
+                                <p className="text-base sm:text-lg font-bold text-[#0D6E6E]">₹{driver.price_per_km.toFixed(0)}</p>
+                                <p className="text-[10px] sm:text-xs text-[#6B7280]">/km</p>
                               </div>
                             </div>
                           </div>
@@ -349,44 +363,56 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
         </div>
       </SectionContainer>
 
-      {/* Contact Section */}
+      {/* Contact Section - Need Help */}
       <SectionContainer variant="tinted">
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="max-w-3xl mx-auto text-center px-4">
           <SectionHeading
             eyebrow="Need Help?"
             title="We are Here to Assist"
             subtitle="Our team is available 24/7 to help with your cab bookings and answer any questions."
           />
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <a 
               href="tel:+919876543210" 
-              className="flex items-center gap-3 px-6 py-4 bg-white rounded-xl border border-[#E8E4DF] hover:border-[#0D6E6E]/30 hover:shadow-md transition-all"
+              className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 bg-white rounded-xl border border-[#E8E4DF] hover:border-[#0D6E6E]/30 hover:shadow-md transition-all w-full sm:w-auto justify-center sm:justify-start"
             >
-              <div className="w-10 h-10 rounded-full bg-[#0D6E6E]/10 flex items-center justify-center">
-                <Phone size={20} className="text-[#0D6E6E]" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0D6E6E]/10 flex items-center justify-center flex-shrink-0">
+                <Phone size={16} className="text-[#0D6E6E] sm:w-5 sm:h-5" />
               </div>
               <div className="text-left">
-                <p className="text-xs text-[#6B7280]">Call Us</p>
-                <p className="font-semibold text-[#1C1C1E]">+91 98765 43210</p>
+                <p className="text-[10px] sm:text-xs text-[#6B7280]">Call Us</p>
+                <p className="font-semibold text-[#1C1C1E] text-sm sm:text-base">+91 98765 43210</p>
               </div>
             </a>
             <a 
               href="https://wa.me/919876543210" 
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-6 py-4 bg-white rounded-xl border border-[#E8E4DF] hover:border-[#0D6E6E]/30 hover:shadow-md transition-all"
+              className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 bg-white rounded-xl border border-[#E8E4DF] hover:border-[#0D6E6E]/30 hover:shadow-md transition-all w-full sm:w-auto justify-center sm:justify-start"
             >
-              <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
-                <MessageCircle size={20} className="text-green-600" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
+                <MessageCircle size={16} className="text-green-600 sm:w-5 sm:h-5" />
               </div>
               <div className="text-left">
-                <p className="text-xs text-[#6B7280]">WhatsApp</p>
-                <p className="font-semibold text-[#1C1C1E]">Quick Chat</p>
+                <p className="text-[10px] sm:text-xs text-[#6B7280]">WhatsApp</p>
+                <p className="font-semibold text-[#1C1C1E] text-sm sm:text-base">Quick Chat</p>
               </div>
             </a>
           </div>
         </div>
       </SectionContainer>
+
+      {/* Booking Modal */}
+      <BookingModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        driver={selectedDriver}
+        pickupLocation={null}
+        dropLocation={null}
+        pickupDate=""
+        pickupTime=""
+        passengerCount={1}
+      />
     </>
   )
 }

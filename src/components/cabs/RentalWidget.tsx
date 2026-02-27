@@ -114,13 +114,14 @@ export function RentalWidget() {
     <div className="space-y-6">
       {/* Search & Filter Bar */}
       <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-white/50 shadow-lg p-4 sm:p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Single Row Layout */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {/* Location Search */}
-          <div className="sm:col-span-2 lg:col-span-1">
-            <label className="block text-sm font-semibold text-[#1C1C1E] mb-2">
-              <span className="flex items-center gap-2">
-                <MapPin size={16} className="text-[#0D6E6E]" />
-                Pickup Location
+          <div className="lg:col-span-2">
+            <label className="block text-xs font-semibold text-[#1C1C1E] mb-1.5">
+              <span className="flex items-center gap-1">
+                <MapPin size={14} className="text-[#0D6E6E]" />
+                Location
               </span>
             </label>
             <LocationSearch
@@ -133,9 +134,9 @@ export function RentalWidget() {
 
           {/* Pickup Date */}
           <div>
-            <label className="block text-sm font-semibold text-[#1C1C1E] mb-2">
-              <span className="flex items-center gap-2">
-                <Calendar size={16} className="text-[#0D6E6E]" />
+            <label className="block text-xs font-semibold text-[#1C1C1E] mb-1.5">
+              <span className="flex items-center gap-1">
+                <Calendar size={14} className="text-[#0D6E6E]" />
                 Pickup Date
               </span>
             </label>
@@ -144,15 +145,15 @@ export function RentalWidget() {
               min={today}
               value={pickupDate}
               onChange={(e) => setPickupDate(e.target.value)}
-              className="w-full px-4 py-3 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all"
+              className="w-full px-3 py-2.5 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] text-sm transition-all"
             />
           </div>
 
           {/* Pickup Time */}
           <div>
-            <label className="block text-sm font-semibold text-[#1C1C1E] mb-2">
-              <span className="flex items-center gap-2">
-                <Clock size={16} className="text-[#0D6E6E]" />
+            <label className="block text-xs font-semibold text-[#1C1C1E] mb-1.5">
+              <span className="flex items-center gap-1">
+                <Clock size={14} className="text-[#0D6E6E]" />
                 Pickup Time
               </span>
             </label>
@@ -160,19 +161,15 @@ export function RentalWidget() {
               type="time"
               value={pickupTime}
               onChange={(e) => setPickupTime(e.target.value)}
-              className="w-full px-4 py-3 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all"
+              className="w-full px-3 py-2.5 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] text-sm transition-all"
             />
           </div>
-        </div>
 
-        {/* Return Date/Time Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-          <div className="hidden lg:block" />
-          <div className="hidden lg:block" />
+          {/* Return Date */}
           <div>
-            <label className="block text-sm font-semibold text-[#1C1C1E] mb-2">
-              <span className="flex items-center gap-2">
-                <Calendar size={16} className="text-[#0D6E6E]" />
+            <label className="block text-xs font-semibold text-[#1C1C1E] mb-1.5">
+              <span className="flex items-center gap-1">
+                <Calendar size={14} className="text-[#0D6E6E]" />
                 Return Date
               </span>
             </label>
@@ -181,13 +178,15 @@ export function RentalWidget() {
               min={pickupDate || today}
               value={returnDate}
               onChange={(e) => setReturnDate(e.target.value)}
-              className="w-full px-4 py-3 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all"
+              className="w-full px-3 py-2.5 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] text-sm transition-all"
             />
           </div>
+
+          {/* Return Time */}
           <div>
-            <label className="block text-sm font-semibold text-[#1C1C1E] mb-2">
-              <span className="flex items-center gap-2">
-                <Clock size={16} className="text-[#0D6E6E]" />
+            <label className="block text-xs font-semibold text-[#1C1C1E] mb-1.5">
+              <span className="flex items-center gap-1">
+                <Clock size={14} className="text-[#0D6E6E]" />
                 Return Time
               </span>
             </label>
@@ -195,7 +194,7 @@ export function RentalWidget() {
               type="time"
               value={returnTime}
               onChange={(e) => setReturnTime(e.target.value)}
-              className="w-full px-4 py-3 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all"
+              className="w-full px-3 py-2.5 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] text-sm transition-all"
             />
           </div>
         </div>

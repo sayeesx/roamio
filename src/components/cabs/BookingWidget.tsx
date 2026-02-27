@@ -26,6 +26,8 @@ export function BookingWidget({
   const [dropLocation, setDropLocation] = useState<Location | null>(null)
   const [pickupDate, setPickupDate] = useState('')
   const [pickupTime, setPickupTime] = useState('')
+  const [returnDate, setReturnDate] = useState('')
+  const [returnTime, setReturnTime] = useState('')
   const [passengerCount, setPassengerCount] = useState(1)
   const [tripType, setTripType] = useState<'one_way' | 'round_trip'>('one_way')
   
@@ -171,7 +173,7 @@ export function BookingWidget({
             <label className="block text-sm font-semibold text-[#1C1C1E] mb-2">
               <span className="flex items-center gap-2">
                 <Calendar size={16} className="text-[#0D6E6E]" />
-                Date
+                {tripType === 'round_trip' ? 'Pickup Date' : 'Date'}
               </span>
             </label>
             <input
@@ -188,7 +190,7 @@ export function BookingWidget({
             <label className="block text-sm font-semibold text-[#1C1C1E] mb-2">
               <span className="flex items-center gap-2">
                 <Clock size={16} className="text-[#0D6E6E]" />
-                Time
+                {tripType === 'round_trip' ? 'Pickup Time' : 'Time'}
               </span>
             </label>
             <input
@@ -220,6 +222,46 @@ export function BookingWidget({
             </select>
           </div>
         </div>
+
+        {/* Return Date/Time for Round Trip */}
+        {tripType === 'round_trip' && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6"
+          >
+            <div>
+              <label className="block text-sm font-semibold text-[#1C1C1E] mb-2">
+                <span className="flex items-center gap-2">
+                  <Calendar size={16} className="text-[#0D6E6E]" />
+                  Return Date
+                </span>
+              </label>
+              <input
+                type="date"
+                min={pickupDate || today}
+                value={returnDate}
+                onChange={(e) => setReturnDate(e.target.value)}
+                className="w-full px-4 py-3 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] focus:ring-2 focus:ring-[#0D6E6E]/10 transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-[#1C1C1E] mb-2">
+                <span className="flex items-center gap-2">
+                  <Clock size={16} className="text-[#0D6E6E]" />
+                  Return Time
+                </span>
+              </label>
+              <input
+                type="time"
+                value={returnTime}
+                onChange={(e) => setReturnTime(e.target.value)}
+                className="w-full px-4 py-3 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] focus:ring-2 focus:ring-[#0D6E6E]/10 transition-all"
+              />
+            </div>
+          </motion.div>
+        )}
 
         {/* Error Message */}
         {error && (
@@ -285,21 +327,10 @@ export function BookingWidget({
           >
             {/* Results Header */}
             <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-xl font-bold text-[#1C1C1E]">Available Drivers</h3>
-                <p className="text-sm text-[#6B7280]">
-                  {drivers.length} {drivers.length === 1 ? 'driver' : 'drivers'} found for your route
-                </p>
-              </div>
-              
-              {pickupLocation && dropLocation && (
-                <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-[#F2EFE9] rounded-xl">
-                  <MapPin size={16} className="text-[#0D6E6E]" />
-                  <span className="text-sm text-[#6B7280]">
-                    {pickupLocation.name} <ArrowRight size={14} className="inline mx-1" /> {dropLocation.name}
-                  </span>
-                </div>
-              )}
+              <h3 className="text-xl font-bold text-[#1C1C1E]">Available Drivers</h3>
+              <p className="text-sm text-[#6B7280]">
+                {drivers.length} {drivers.length === 1 ? 'driver' : 'drivers'} found for your route
+              </p>
             </div>
 
             {/* Drivers Grid - Responsive */}

@@ -100,7 +100,7 @@ export function BookingModal({
         pickupDate: pickupDate,
         pickupTime: pickupTime,
         driverId: driver.driver_id,
-        driverVehicleId: driver.vehicle_id,
+        driverVehicleId: driver.driver_vehicle_id,
         estimatedDistanceKm: 10, // Default estimation
         baseFare: driver.price_per_km * 10,
         totalFare: driver.price_per_km * 10,

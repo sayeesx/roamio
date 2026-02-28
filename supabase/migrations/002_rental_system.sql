@@ -120,12 +120,14 @@ CREATE TABLE rental_bookings (
     pickup_time TIME NOT NULL,
     return_date DATE NOT NULL,
     return_time TIME NOT NULL,
+    total_days INTEGER NOT NULL, -- Duration of rental in days
     
     -- Pickup & Return Location
     pickup_location_id UUID REFERENCES locations(id),
     return_location_id UUID REFERENCES locations(id),
     
     -- Pricing
+    daily_rate INTEGER, -- Store the daily rate at time of booking
     base_rental_amount INTEGER NOT NULL, -- Calculated based on duration
     security_deposit INTEGER DEFAULT 0,
     additional_charges INTEGER DEFAULT 0, -- Late fees, damages, etc.

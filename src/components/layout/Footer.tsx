@@ -25,7 +25,7 @@ const footerLinks = {
 export default function Footer() {
     return (
         <footer className="bg-[#0a2e2e] text-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
                     {/* Brand col */}
                     <div className="col-span-2 lg:col-span-2">
@@ -121,10 +121,10 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom bar */}
-                <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/10">
+                <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-white/10">
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                         <p className="text-white/60 text-xs">
-                            © {new Date().getFullYear()} Roamio. All rights reserved.
+                            © {new Date().getFullYear()} Shahr. All rights reserved.
                         </p>
                         {/* Social */}
                         <div className="flex items-center gap-4">

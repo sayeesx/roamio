@@ -81,19 +81,19 @@ const destinations = [
 
 const testimonials = [
   {
-    quote: 'Roamio organized my entire Ayurveda treatment at Kottakkal. From airport to hospital to stay — everything was seamless.',
+    quote: 'Shahr organized my entire Ayurveda treatment at Kottakkal. From airport to hospital to stay — everything was seamless.',
     author: 'Ahmed Al-Rashidi',
     role: 'Dubai, UAE',
     rating: 5,
   },
   {
-    quote: 'As an NRI visiting for two weeks, Roamio packed everything in perfectly — property, family doctor, and a weekend in Munnar.',
+    quote: 'As an NRI visiting for two weeks, Shahr packed everything in perfectly — property, family doctor, and a weekend in Munnar.',
     author: 'Priya Menon',
     role: 'London, UK',
     rating: 5,
   },
   {
-    quote: 'I was nervous about medical travel abroad. Roamio guided me every step of the way. I felt completely taken care of.',
+    quote: 'I was nervous about medical travel abroad. Shahr guided me every step of the way. I felt completely taken care of.',
     author: 'Fatima Al-Qasim',
     role: 'Riyadh, KSA',
     rating: 5,
@@ -163,11 +163,11 @@ export default function HomePage() {
 
       </section>
 
-      {/* ——— How Roamio Works ——— */}
+      {/* ——— How Shahr Works ——— */}
       <SectionContainer id="how-it-works">
         <SectionHeading
           eyebrow="Our Process"
-          title="How Roamio Works"
+          title="How Shahr Works"
           subtitle="Three simple steps from intent to execution. We handle everything in between."
         />
         <StepIndicator steps={howItWorks} />
@@ -270,7 +270,7 @@ export default function HomePage() {
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           <div>
             <SectionHeading
-              eyebrow="Why Trust Roamio"
+              eyebrow="Why Trust Shahr"
               title="Security, Privacy & Local Expertise"
               subtitle="We take your data and health seriously. Your trust is the foundation of everything we do."
               centered={false}

@@ -13,19 +13,32 @@ interface BookingWidgetProps {
   isCompact?: boolean
   onSearchStart?: () => void
   onSearchComplete?: (drivers: DriverWithVehicle[]) => void
+  onDateTimeChange?: (date: string, time: string) => void
 }
 
 export function BookingWidget({ 
   className, 
   isCompact = false, 
   onSearchStart, 
-  onSearchComplete 
+  onSearchComplete,
+  onDateTimeChange
 }: BookingWidgetProps) {
   // Form State
   const [pickupLocation, setPickupLocation] = useState<Location | null>(null)
   const [dropLocation, setDropLocation] = useState<Location | null>(null)
   const [pickupDate, setPickupDate] = useState('')
   const [pickupTime, setPickupTime] = useState('')
+  
+  // Notify parent of date/time changes
+  const handleDateChange = useCallback((date: string) => {
+    setPickupDate(date)
+    onDateTimeChange?.(date, pickupTime)
+  }, [onDateTimeChange, pickupTime])
+  
+  const handleTimeChange = useCallback((time: string) => {
+    setPickupTime(time)
+    onDateTimeChange?.(pickupDate, time)
+  }, [onDateTimeChange, pickupDate])
   const [returnDate, setReturnDate] = useState('')
   const [returnTime, setReturnTime] = useState('')
   const [passengerCount, setPassengerCount] = useState(1)
@@ -180,7 +193,7 @@ export function BookingWidget({
               type="date"
               min={today}
               value={pickupDate}
-              onChange={(e) => setPickupDate(e.target.value)}
+              onChange={(e) => handleDateChange(e.target.value)}
               className="w-full px-4 py-3 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] focus:ring-2 focus:ring-[#0D6E6E]/10 transition-all"
             />
           </div>
@@ -196,7 +209,7 @@ export function BookingWidget({
             <input
               type="time"
               value={pickupTime}
-              onChange={(e) => setPickupTime(e.target.value)}
+              onChange={(e) => handleTimeChange(e.target.value)}
               className="w-full px-4 py-3 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] focus:ring-2 focus:ring-[#0D6E6E]/10 transition-all"
             />
           </div>

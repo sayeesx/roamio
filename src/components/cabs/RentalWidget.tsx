@@ -7,6 +7,8 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { LocationSearch } from './LocationSearch'
 import { RentalBookingModal } from './RentalBookingModal'
+import { useToast } from '@/hooks/use-toast'
+import { Toaster } from '@/components/ui/toaster'
 import type { Location } from '@/lib/supabase/cabs'
 
 type VehicleType = 'all' | 'car' | 'bike' | 'bicycle'
@@ -58,6 +60,7 @@ const fuelTypeFilters = [
 ] as const
 
 export function RentalWidget() {
+  const { toast } = useToast()
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
   const [pickupDate, setPickupDate] = useState('')
   const [pickupTime, setPickupTime] = useState('')
@@ -72,6 +75,21 @@ export function RentalWidget() {
   
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedVehicle, setSelectedVehicle] = useState<RentalVehicle | null>(null)
+
+  const handleBookingSuccess = useCallback((reference: string) => {
+    toast({
+      title: 'Rental Confirmed!',
+      description: `Your booking reference: ${reference}`,
+    })
+  }, [toast])
+
+  const handleBookingError = useCallback((error: string) => {
+    toast({
+      title: 'Booking Failed',
+      description: error,
+      variant: 'destructive',
+    })
+  }, [toast])
 
   const today = new Date().toISOString().split('T')[0]
 
@@ -419,7 +437,12 @@ export function RentalWidget() {
         pickupTime={pickupTime}
         returnDate={returnDate}
         returnTime={returnTime}
+        onBookingSuccess={handleBookingSuccess}
+        onBookingError={handleBookingError}
       />
+      
+      {/* Toast Notifications */}
+      <Toaster />
     </div>
   )
 }

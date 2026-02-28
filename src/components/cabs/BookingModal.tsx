@@ -17,22 +17,23 @@ interface BookingModalProps {
   pickupTime: string
   passengerCount: number
   onBookingSuccess?: (reference: string) => void
+  onBookingError?: (error: string) => void
 }
 
-// Country codes for phone input
+// Country codes for phone input - using SVG flags to avoid hydration issues
 const countryCodes = [
-  { code: 'IN', dial: '+91', flag: '🇮🇳', name: 'India' },
-  { code: 'US', dial: '+1', flag: '🇺🇸', name: 'United States' },
-  { code: 'GB', dial: '+44', flag: '🇬🇧', name: 'United Kingdom' },
-  { code: 'AE', dial: '+971', flag: '🇦🇪', name: 'UAE' },
-  { code: 'SA', dial: '+966', flag: '🇸🇦', name: 'Saudi Arabia' },
-  { code: 'QA', dial: '+974', flag: '🇶🇦', name: 'Qatar' },
-  { code: 'KW', dial: '+965', flag: '🇰🇼', name: 'Kuwait' },
-  { code: 'BH', dial: '+973', flag: '🇧🇭', name: 'Bahrain' },
-  { code: 'OM', dial: '+968', flag: '🇴🇲', name: 'Oman' },
-  { code: 'AU', dial: '+61', flag: '🇦🇺', name: 'Australia' },
-  { code: 'CA', dial: '+1', flag: '🇨🇦', name: 'Canada' },
-  { code: 'SG', dial: '+65', flag: '🇸🇬', name: 'Singapore' },
+  { code: 'IN', dial: '+91', name: 'India' },
+  { code: 'US', dial: '+1', name: 'United States' },
+  { code: 'GB', dial: '+44', name: 'United Kingdom' },
+  { code: 'AE', dial: '+971', name: 'UAE' },
+  { code: 'SA', dial: '+966', name: 'Saudi Arabia' },
+  { code: 'QA', dial: '+974', name: 'Qatar' },
+  { code: 'KW', dial: '+965', name: 'Kuwait' },
+  { code: 'BH', dial: '+973', name: 'Bahrain' },
+  { code: 'OM', dial: '+968', name: 'Oman' },
+  { code: 'AU', dial: '+61', name: 'Australia' },
+  { code: 'CA', dial: '+1', name: 'Canada' },
+  { code: 'SG', dial: '+65', name: 'Singapore' },
 ]
 
 export function BookingModal({
@@ -44,7 +45,8 @@ export function BookingModal({
   pickupDate,
   pickupTime,
   passengerCount,
-  onBookingSuccess
+  onBookingSuccess,
+  onBookingError
 }: BookingModalProps) {
   const [step, setStep] = useState<'details' | 'confirm'>('details')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -112,11 +114,15 @@ export function BookingModal({
         setIsSuccess(true)
         onBookingSuccess?.(result.bookingReference)
       } else {
-        setErrors({ submit: result.error || 'Booking failed. Please try again.' })
+        const errorMsg = result.error || 'Booking failed. Please try again.'
+        setErrors({ submit: errorMsg })
+        onBookingError?.(errorMsg)
       }
     } catch (error) {
       console.error('Booking error:', error)
-      setErrors({ submit: 'An unexpected error occurred. Please try again.' })
+      const errorMsg = 'An unexpected error occurred. Please try again.'
+      setErrors({ submit: errorMsg })
+      onBookingError?.(errorMsg)
     } finally {
       setIsSubmitting(false)
     }
@@ -249,7 +255,7 @@ export function BookingModal({
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="Enter your full name"
                       className={cn(
-                        'w-full px-4 py-3 bg-white border-2 rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all',
+                        'w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 rounded-lg sm:rounded-xl text-sm sm:text-base text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all',
                         errors.fullName ? 'border-red-300' : 'border-[#E8E4DF]'
                       )}
                     />
@@ -268,11 +274,11 @@ export function BookingModal({
                       <select
                         value={countryCode}
                         onChange={(e) => setCountryCode(e.target.value)}
-                        className="px-3 py-3 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all"
+                        className="px-2 sm:px-3 py-2.5 sm:py-3 bg-white border-2 border-[#E8E4DF] rounded-lg sm:rounded-xl text-sm sm:text-base text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all"
                       >
                         {countryCodes.map((c) => (
                           <option key={c.code} value={c.dial}>
-                            {c.flag} {c.dial}
+                            {c.dial} ({c.code})
                           </option>
                         ))}
                       </select>
@@ -282,7 +288,7 @@ export function BookingModal({
                         onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
                         placeholder="98765 43210"
                         className={cn(
-                          'flex-1 px-4 py-3 bg-white border-2 rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all',
+                          'flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 rounded-lg sm:rounded-xl text-sm sm:text-base text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all',
                           errors.phone ? 'border-red-300' : 'border-[#E8E4DF]'
                         )}
                       />
@@ -300,7 +306,7 @@ export function BookingModal({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="your@email.com"
-                      className="w-full px-4 py-3 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-[#E8E4DF] rounded-lg sm:rounded-xl text-sm sm:text-base text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all"
                     />
                   </div>
 
@@ -318,7 +324,7 @@ export function BookingModal({
                       placeholder="House number, street, landmark..."
                       rows={2}
                       className={cn(
-                        'w-full px-4 py-3 bg-white border-2 rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all resize-none',
+                        'w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 rounded-lg sm:rounded-xl text-sm sm:text-base text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all resize-none',
                         errors.pickupAddress ? 'border-red-300' : 'border-[#E8E4DF]'
                       )}
                     />
@@ -339,7 +345,7 @@ export function BookingModal({
                       placeholder="House number, street, landmark..."
                       rows={2}
                       className={cn(
-                        'w-full px-4 py-3 bg-white border-2 rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all resize-none',
+                        'w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 rounded-lg sm:rounded-xl text-sm sm:text-base text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all resize-none',
                         errors.dropAddress ? 'border-red-300' : 'border-[#E8E4DF]'
                       )}
                     />
@@ -359,7 +365,7 @@ export function BookingModal({
                       onChange={(e) => setSpecialRequests(e.target.value)}
                       placeholder="Any special requirements..."
                       rows={2}
-                      className="w-full px-4 py-3 bg-white border-2 border-[#E8E4DF] rounded-xl text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all resize-none"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white border-2 border-[#E8E4DF] rounded-lg sm:rounded-xl text-sm sm:text-base text-[#1C1C1E] focus:outline-none focus:border-[#0D6E6E] transition-all resize-none"
                     />
                   </div>
                 </div>

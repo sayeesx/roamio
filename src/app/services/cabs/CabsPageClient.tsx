@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Car, MapPin, Clock, Users, CheckCircle, Star, Shield, Phone, MessageCircle, ThumbsUp, Navigation, Loader2, Search, Bike, Fuel, Zap } from 'lucide-react'
+import { ArrowRight, Car, MapPin, Clock, Users, CheckCircle, Star, Shield, Phone, MessageCircle, ThumbsUp, Navigation, Loader2, Search, Bike, Fuel, Zap, ChevronDown, ChevronUp } from 'lucide-react'
 import { SectionContainer, SectionHeading } from '@/components/ui/SectionContainer'
 import { CTAButton } from '@/components/ui/CTAButton'
 import { FeatureCard, StepIndicator } from '@/components/ui/Cards'
@@ -10,6 +10,8 @@ import { BookingWidget } from '@/components/cabs/BookingWidget'
 import { AnimatedStat } from '@/components/cabs/CountUp'
 import { RentalWidget } from '@/components/cabs/RentalWidget'
 import { BookingModal } from '@/components/cabs/BookingModal'
+import { Toaster } from '@/components/ui/toaster'
+import { useToast } from '@/hooks/use-toast'
 import type { DriverWithVehicle } from '@/lib/supabase/cabs'
 
 interface CabsPageClientProps {
@@ -51,10 +53,15 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
   const [isSearching, setIsSearching] = useState(false)
   const [selectedDriver, setSelectedDriver] = useState<DriverWithVehicle | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showAllDrivers, setShowAllDrivers] = useState(false)
+  const [pickupDate, setPickupDate] = useState('')
+  const [pickupTime, setPickupTime] = useState('')
+  const { toast } = useToast()
 
   const handleSearchStart = useCallback(() => {
     setIsSearching(true)
     setIsSearchMode(true)
+    setShowAllDrivers(false)
   }, [])
 
   const handleSearchComplete = useCallback((foundDrivers: DriverWithVehicle[]) => {
@@ -77,6 +84,27 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
     setIsModalOpen(false)
     setSelectedDriver(null)
   }, [])
+
+  const handleDateTimeChange = useCallback((date: string, time: string) => {
+    setPickupDate(date)
+    setPickupTime(time)
+  }, [])
+
+  const handleBookingSuccess = useCallback((reference: string) => {
+    toast({
+      title: 'Booking Confirmed!',
+      description: `Your booking reference: ${reference}`,
+      variant: 'success',
+    })
+  }, [toast])
+
+  const handleBookingError = useCallback((error: string) => {
+    toast({
+      title: 'Booking Failed',
+      description: error,
+      variant: 'destructive',
+    })
+  }, [toast])
 
   return (
     <>
@@ -175,6 +203,7 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
                     <BookingWidget 
                       onSearchStart={handleSearchStart}
                       onSearchComplete={handleSearchComplete}
+                      onDateTimeChange={handleDateTimeChange}
                     />
                   </div>
                 </div>
@@ -203,6 +232,7 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
                       isCompact
                       onSearchStart={handleSearchStart}
                       onSearchComplete={handleSearchComplete}
+                      onDateTimeChange={handleDateTimeChange}
                     />
                   </div>
                 </div>
@@ -225,36 +255,58 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
                       )}
                     </div>
 
-                    {/* Drivers Grid */}
+                    {/* Drivers Grid - Show only 4 initially */}
                     {!isSearching && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {drivers.map((driver) => (
-                          <div 
-                            key={driver.driver_id}
-                            onClick={() => handleDriverClick(driver)}
-                            className="bg-white rounded-xl border border-[#E8E4DF] p-3 sm:p-4 hover:border-[#0D6E6E]/30 hover:shadow-md transition-all cursor-pointer"
-                          >
-                            <div className="flex items-start gap-2 sm:gap-3">
-                              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#F2EFE9] flex items-center justify-center flex-shrink-0">
-                                <Car size={16} className="text-[#0D6E6E] sm:w-5 sm:h-5" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <h4 className="font-bold text-[#1C1C1E] text-sm truncate">{driver.full_name}</h4>
-                                <p className="text-xs text-[#6B7280]">{driver.brand} {driver.model}</p>
-                                <div className="flex items-center gap-1.5 mt-1">
-                                  <Star size={12} className="text-[#C9A84C] fill-[#C9A84C] sm:w-3.5 sm:h-3.5" />
-                                  <span className="text-xs font-medium">{driver.rating.toFixed(1)}</span>
-                                  <span className="text-[10px] sm:text-xs text-[#6B7280]">• {driver.total_trips.toLocaleString()} trips</span>
+                      <>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {(showAllDrivers ? drivers : drivers.slice(0, 4)).map((driver) => (
+                            <div 
+                              key={driver.driver_id}
+                              onClick={() => handleDriverClick(driver)}
+                              className="bg-white rounded-xl border border-[#E8E4DF] p-3 sm:p-4 hover:border-[#0D6E6E]/30 hover:shadow-md transition-all cursor-pointer"
+                            >
+                              <div className="flex items-start gap-2 sm:gap-3">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#F2EFE9] flex items-center justify-center flex-shrink-0">
+                                  <Car size={16} className="text-[#0D6E6E] sm:w-5 sm:h-5" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-bold text-[#1C1C1E] text-sm truncate">{driver.full_name}</h4>
+                                  <p className="text-xs text-[#6B7280]">{driver.brand} {driver.model}</p>
+                                  <div className="flex items-center gap-1.5 mt-1">
+                                    <Star size={12} className="text-[#C9A84C] fill-[#C9A84C] sm:w-3.5 sm:h-3.5" />
+                                    <span className="text-xs font-medium">{driver.rating.toFixed(1)}</span>
+                                    <span className="text-[10px] sm:text-xs text-[#6B7280]">• {driver.total_trips.toLocaleString()} trips</span>
+                                  </div>
+                                </div>
+                                <div className="text-right flex-shrink-0">
+                                  <p className="text-base sm:text-lg font-bold text-[#0D6E6E]">₹{driver.price_per_km.toFixed(0)}</p>
+                                  <p className="text-[10px] sm:text-xs text-[#6B7280]">/km</p>
                                 </div>
                               </div>
-                              <div className="text-right flex-shrink-0">
-                                <p className="text-base sm:text-lg font-bold text-[#0D6E6E]">₹{driver.price_per_km.toFixed(0)}</p>
-                                <p className="text-[10px] sm:text-xs text-[#6B7280]">/km</p>
-                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
+                          ))}
+                        </div>
+                        
+                        {/* Show More/Less Button */}
+                        {drivers.length > 4 && (
+                          <button
+                            onClick={() => setShowAllDrivers(!showAllDrivers)}
+                            className="w-full mt-4 py-3 px-4 bg-[#F2EFE9] hover:bg-[#E8E4DF] rounded-xl text-sm font-semibold text-[#0D6E6E] transition-colors flex items-center justify-center gap-2"
+                          >
+                            {showAllDrivers ? (
+                              <>
+                                <ChevronUp size={18} />
+                                Show Less
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown size={18} />
+                                Show {drivers.length - 4} More Drivers
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -322,21 +374,21 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
         </div>
       </SectionContainer>
 
-      {/* CTA Banner */}
+      {/* CTA Banner - Mobile Optimized */}
       <SectionContainer variant="dark">
-        <div className="text-center max-w-2xl mx-auto">
+        <div className="text-center max-w-2xl mx-auto px-4">
           <SectionHeading
             eyebrow="Ready to Go"
             title="Book Your Kerala Cab Now"
-            subtitle="Join thousands of travelers who trust Roamio for their Kerala journeys."
+            subtitle="Join thousands of travelers who trust Shahr for their Kerala journeys."
             light
           />
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <CTAButton href="#" variant="primary" size="lg" className="w-full sm:w-auto">
-              Book Your Ride <ArrowRight size={20} />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <CTAButton href="#" variant="primary" size="lg" className="w-full sm:w-auto text-sm sm:text-base py-3 sm:py-4">
+              Book Your Ride <ArrowRight size={18} className="sm:w-5 sm:h-5" />
             </CTAButton>
-            <a href="tel:+919876543210" className="flex items-center gap-2 text-white/80 hover:text-white transition-colors">
-              <Phone size={20} />
+            <a href="tel:+919876543210" className="flex items-center gap-2 text-white/80 hover:text-white transition-colors text-sm sm:text-base">
+              <Phone size={18} className="sm:w-5 sm:h-5" />
               <span>Call us: +91 98765 43210</span>
             </a>
           </div>
@@ -409,10 +461,15 @@ export function CabsPageClient({ stats }: CabsPageClientProps) {
         driver={selectedDriver}
         pickupLocation={null}
         dropLocation={null}
-        pickupDate=""
-        pickupTime=""
+        pickupDate={pickupDate}
+        pickupTime={pickupTime}
         passengerCount={1}
+        onBookingSuccess={handleBookingSuccess}
+        onBookingError={handleBookingError}
       />
+      
+      {/* Toast Notifications */}
+      <Toaster />
     </>
   )
 }

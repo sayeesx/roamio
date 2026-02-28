@@ -212,13 +212,16 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
--- Apply triggers
+-- Apply triggers (drop if exists first for idempotency)
+DROP TRIGGER IF EXISTS update_drivers_updated_at ON drivers;
 CREATE TRIGGER update_drivers_updated_at BEFORE UPDATE ON drivers
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_vehicles_updated_at ON vehicles;
 CREATE TRIGGER update_vehicles_updated_at BEFORE UPDATE ON vehicles
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_cab_bookings_updated_at ON cab_bookings;
 CREATE TRIGGER update_cab_bookings_updated_at BEFORE UPDATE ON cab_bookings
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
@@ -288,7 +291,7 @@ INSERT INTO locations (name, name_ml, type, district, popularity_score) VALUES
 ('Alappuzha Railway Station', 'ആലപ്പുഴ റെയിൽവേ സ്റ്റേഷൻ', 'Railway Station', 'Alappuzha', 70),
 ('Thrissur Railway Station', 'തൃശ്ശൂർ റെയിൽവേ സ്റ്റേഷൻ', 'Railway Station', 'Thrissur', 75),
 ('Kozhikode Railway Station', 'കോഴിക്കോട് റെയിൽവേ സ്റ്റേഷൻ', 'Railway Station', 'Kozhikode', 80)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (name) DO NOTHING;
 
 -- ============================================================================
 -- 8. INSERT DUMMY DRIVERS (Kerala-based, Realistic Data)
@@ -306,7 +309,8 @@ INSERT INTO drivers (first_name, last_name, phone, email, license_number, licens
 ('Faisal', 'Hassan', '+91-98471-90123', 'faisal.h@email.com', 'KL-13-2020-0090123', '2030-06-22', 'LMV', 4, 4.2, 987, 'Kannur', '{"Kannur", "Kasaragod", "Kozhikode", "Wayanad"}', 'Young and energetic driver. Great for long distance trips to North Kerala.', '{"English", "Malayalam", "Hindi"}', true, true, 'https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=400&h=400&fit=crop&crop=face'),
 ('Gopal', 'Nambiar', '+91-98471-01234', 'gopal.n@email.com', 'KL-03-2017-0001234', '2027-10-05', 'LMV', 9, 4.7, 3421, 'Wayanad', '{"Wayanad", "Kozhikode", "Mysore", "Ooty"}', 'Expert hill driver for Wayanad and nearby destinations. Cross-border experience to Karnataka and Tamil Nadu.', '{"English", "Malayalam", "Kannada", "Tamil"}', true, true, 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face'),
 ('Ramesh', 'Iyer', '+91-98472-12345', 'ramesh.i@email.com', 'KL-22-2018-0112345', '2028-02-14', 'LMV', 6, 4.5, 1876, 'Kollam', '{"Kollam", "Thiruvananthapuram", "Varkala", "Ponmudi"}', 'South Kerala specialist. Expert in beach and backwater routes.', '{"English", "Malayalam", "Tamil"}', true, true, 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face'),
-('Shaji', 'Mathew', '+91-98472-23456', 'shaji.m@email.com', 'KL-33-2016-0123456', '2026-08-30', 'HGV', 11, 4.6, 4892, 'Kochi', '{"Kochi", "Ernakulam", "Thrissur", "Kottayam", "Alappuzha"}', 'Group tour specialist with tempo traveller experience. Perfect for family trips.', '{"English", "Malayalam", "Hindi"}', true, true, 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face');
+('Shaji', 'Mathew', '+91-98472-23456', 'shaji.m@email.com', 'KL-33-2016-0123456', '2026-08-30', 'HGV', 11, 4.6, 4892, 'Kochi', '{"Kochi", "Ernakulam", "Thrissur", "Kottayam", "Alappuzha"}', 'Group tour specialist with tempo traveller experience. Perfect for family trips.', '{"English", "Malayalam", "Hindi"}', true, true, 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face')
+ON CONFLICT (phone) DO NOTHING;
 
 -- ============================================================================
 -- 9. INSERT VEHICLES (Popular Models in Kerala)
@@ -327,7 +331,8 @@ INSERT INTO vehicles (brand, model, year, registration_number, registration_stat
 ('Kia', 'Carens', 2023, 'KL-03-ST-5678', 'KL', 'Diesel', 7, true, 'MUV', 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&h=400&fit=crop'),
 ('Toyota', 'Camry', 2022, 'KL-22-UV-9012', 'KL', 'Hybrid', 4, true, 'Luxury', 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600&h=400&fit=crop'),
 ('Mahindra', 'Marazzo', 2022, 'KL-33-WX-3456', 'KL', 'Diesel', 8, true, 'MUV', 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&h=400&fit=crop'),
-('Maruti Suzuki', 'Eeco', 2021, 'KL-05-YZ-7890', 'KL', 'CNG', 7, false, 'MUV', 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&h=400&fit=crop');
+('Maruti Suzuki', 'Eeco', 2021, 'KL-05-YZ-7890', 'KL', 'CNG', 7, false, 'MUV', 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&h=400&fit=crop')
+ON CONFLICT (registration_number) DO NOTHING;
 
 -- ============================================================================
 -- 10. LINK DRIVERS TO VEHICLES (driver_vehicles junction table)
@@ -381,6 +386,7 @@ SELECT
     v.seating_capacity,
     v.has_ac,
     v.primary_image_url as vehicle_image,
+    dv.id as driver_vehicle_id,
     dv.price_per_km
 FROM drivers d
 JOIN driver_vehicles dv ON d.id = dv.driver_id
@@ -430,6 +436,10 @@ CREATE POLICY driver_vehicles_read_public ON driver_vehicles
 -- Bookings: users can read their own bookings
 CREATE POLICY bookings_read_own ON cab_bookings
     FOR SELECT TO PUBLIC USING (true);
+
+-- Bookings: allow anonymous users to create bookings
+CREATE POLICY bookings_insert_anon ON cab_bookings
+    FOR INSERT TO PUBLIC WITH CHECK (true);
 
 -- ============================================================================
 -- SCHEMA COMPLETE

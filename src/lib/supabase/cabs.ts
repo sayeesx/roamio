@@ -118,6 +118,7 @@ export interface DriverWithVehicle {
   seating_capacity: number
   has_ac: boolean
   vehicle_image: string
+  driver_vehicle_id: string
   price_per_km: number
 }
 

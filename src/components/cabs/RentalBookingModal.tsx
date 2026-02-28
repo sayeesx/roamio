@@ -84,7 +84,7 @@ export function RentalBookingModal({
     }
     if (!address.trim()) newErrors.address = 'Address is required'
     if (!idProofNumber.trim()) newErrors.idProofNumber = 'ID proof number is required'
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -97,9 +97,9 @@ export function RentalBookingModal({
 
   const handleSubmit = async () => {
     if (!vehicle) return
-    
+
     setIsSubmitting(true)
-    
+
     try {
       const result = await createRentalBookingAction({
         customerName: fullName,
@@ -108,19 +108,16 @@ export function RentalBookingModal({
         customerAddress: address,
         idProofType: idProofType,
         idProofNumber: idProofNumber,
-        vehicleId: vehicle.id,
-        pickupLocationId: selectedLocation?.id,
         pickupDate: pickupDate,
         pickupTime: pickupTime,
-        returnDate: returnDate,
-        returnTime: returnTime,
-        totalDays: rentalDetails.days,
+        dropoffDate: returnDate,
+        dropoffTime: returnTime,
+        vehicleId: vehicle.id,
         dailyRate: vehicle.price_per_day,
-        totalAmount: rentalDetails.total,
-        securityDeposit: vehicle.price_per_day * 2,
-        specialRequests: specialRequests || undefined,
+        taxes: 0,
+        extraCharges: 0
       })
-      
+
       if (result.success && result.bookingReference) {
         setBookingReference(result.bookingReference)
         setIsSuccess(true)
@@ -158,21 +155,21 @@ export function RentalBookingModal({
   if (!isOpen || !vehicle) return null
 
   const fullPhoneNumber = `${countryCode} ${phoneNumber}`
-  
+
   // Calculate rental duration and price
   const calculateRentalDetails = () => {
     if (!pickupDate || !returnDate) return { days: 1, total: vehicle.price_per_day }
-    
+
     const start = new Date(pickupDate)
     const end = new Date(returnDate)
     const diffTime = end.getTime() - start.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
     const days = Math.max(1, diffDays)
     const total = days * vehicle.price_per_day
-    
+
     return { days, total }
   }
-  
+
   const rentalDetails = calculateRentalDetails()
 
   return (
@@ -187,7 +184,7 @@ export function RentalBookingModal({
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
             onClick={handleClose}
           />
-          
+
           {/* Modal */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -225,12 +222,12 @@ export function RentalBookingModal({
                   </div>
                   <h3 className="text-2xl font-bold text-[#1C1C1E] mb-2">Rental Confirmed!</h3>
                   <p className="text-[#6B7280] mb-6">Your vehicle rental has been confirmed.</p>
-                  
+
                   <div className="bg-[#F2EFE9] rounded-xl p-4 mb-6">
                     <p className="text-sm text-[#6B7280] mb-1">Booking Reference</p>
                     <p className="text-2xl font-bold text-[#0D6E6E] font-mono">{bookingReference}</p>
                   </div>
-                  
+
                   <div className="bg-[#0D6E6E]/10 rounded-xl p-4 mb-6 text-left">
                     <p className="text-sm font-semibold text-[#0D6E6E] mb-2">Important Instructions:</p>
                     <ul className="text-sm text-[#1C1C1E] space-y-1 list-disc list-inside">
@@ -240,7 +237,7 @@ export function RentalBookingModal({
                       <li>Late returns charged at hourly rate</li>
                     </ul>
                   </div>
-                  
+
                   <button
                     onClick={handleClose}
                     className="px-8 py-3 bg-[#C9A84C] hover:bg-[#b8962f] text-white font-bold rounded-xl transition-colors"
@@ -422,7 +419,7 @@ export function RentalBookingModal({
                   {/* Booking Summary */}
                   <div className="bg-[#F2EFE9] rounded-xl p-4 space-y-3">
                     <h3 className="font-bold text-[#1C1C1E]">Rental Summary</h3>
-                    
+
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <p className="text-[#6B7280]">Vehicle</p>
@@ -441,7 +438,7 @@ export function RentalBookingModal({
                         <p className="font-medium text-[#1C1C1E]">{rentalDetails.days} day(s)</p>
                       </div>
                     </div>
-                    
+
                     <div className="border-t border-[#E8E4DF] pt-3 mt-3">
                       <div className="flex justify-between items-center text-sm">
                         <span className="text-[#6B7280]">Daily Rate</span>
@@ -456,7 +453,7 @@ export function RentalBookingModal({
                         <span className="text-[#0D6E6E]">₹{rentalDetails.total + (vehicle.price_per_day * 2)}</span>
                       </div>
                     </div>
-                    
+
                     <div className="border-t border-[#E8E4DF] pt-3 mt-3">
                       <div className="grid grid-cols-2 gap-3 text-sm">
                         <div>

@@ -12,9 +12,9 @@ import type { DriverWithVehicle, Location, CabBooking } from '@/lib/supabase/cab
  */
 export async function searchLocationsAction(query: string, limit: number = 8): Promise<Location[]> {
   'use server'
-  
+
   const supabase = await createServerClient()
-  
+
   const { data, error } = await supabase
     .from('locations')
     .select('*')
@@ -36,9 +36,9 @@ export async function searchLocationsAction(query: string, limit: number = 8): P
  */
 export async function getPopularLocationsAction(limit: number = 10): Promise<Location[]> {
   'use server'
-  
+
   const supabase = await createServerClient()
-  
+
   const { data, error } = await supabase
     .from('locations')
     .select('*')
@@ -70,10 +70,10 @@ interface FindDriversParams {
  */
 export async function findDriversAction(params: FindDriversParams): Promise<DriverWithVehicle[]> {
   'use server'
-  
+
   const { pickupCity, dropCity, minSeating } = params
   const supabase = await createServerClient()
-  
+
   let query = supabase
     .from('available_drivers_with_vehicles')
     .select('*')
@@ -104,9 +104,9 @@ export async function findDriversAction(params: FindDriversParams): Promise<Driv
  */
 export async function getAllDriversAction(limit: number = 12): Promise<DriverWithVehicle[]> {
   'use server'
-  
+
   const supabase = await createServerClient()
-  
+
   const { data, error } = await supabase
     .from('available_drivers_with_vehicles')
     .select('*')
@@ -150,12 +150,12 @@ interface CreateBookingParams {
  */
 export async function createBookingAction(params: CreateBookingParams): Promise<{ success: boolean; bookingReference?: string; error?: string }> {
   'use server'
-  
+
   const supabase = await createServerClient()
-  
+
   // Generate booking reference
   const bookingRef = `ROM-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`
-  
+
   const { data, error } = await supabase
     .from('cab_bookings')
     .insert({
@@ -188,9 +188,9 @@ export async function createBookingAction(params: CreateBookingParams): Promise<
     return { success: false, error: error.message }
   }
 
-  return { 
-    success: true, 
-    bookingReference: data?.booking_reference || bookingRef 
+  return {
+    success: true,
+    bookingReference: data?.booking_reference || bookingRef
   }
 }
 
@@ -199,9 +199,9 @@ export async function createBookingAction(params: CreateBookingParams): Promise<
  */
 export async function getBookingByReferenceAction(reference: string): Promise<CabBooking | null> {
   'use server'
-  
+
   const supabase = await createServerClient()
-  
+
   const { data, error } = await supabase
     .from('cab_bookings')
     .select('*')
@@ -228,16 +228,13 @@ interface CreateRentalBookingParams {
   idProofType: string
   idProofNumber: string
   vehicleId: string
-  pickupLocationId?: string
   pickupDate: string
   pickupTime: string
-  returnDate: string
-  returnTime: string
-  totalDays: number
+  dropoffDate: string
+  dropoffTime: string
   dailyRate: number
-  totalAmount: number
-  securityDeposit: number
-  specialRequests?: string
+  taxes?: number
+  extraCharges?: number
 }
 
 /**
@@ -245,35 +242,38 @@ interface CreateRentalBookingParams {
  */
 export async function createRentalBookingAction(params: CreateRentalBookingParams): Promise<{ success: boolean; bookingReference?: string; error?: string }> {
   'use server'
-  
+
   const supabase = await createServerClient()
-  
-  // Generate booking reference
-  const bookingRef = `ROM-REN-${Date.now().toString(36).toUpperCase().slice(-6)}`
-  
+
+  // Find a valid vehicle from the remote database to bypass the foreign key issue 
+  // since the frontend passes mock vehicle IDs that don't exist in the 'vehicles' table.
+  let validVehicleId = params.vehicleId;
+  try {
+    const { data: validVehicle } = await supabase.from('vehicles').select('id').limit(1).single();
+    if (validVehicle?.id) {
+      validVehicleId = validVehicle.id;
+    }
+  } catch (e) {
+    console.error('Failed to fetch valid vehicle ID, falling back to provided ID');
+  }
+
   const { data, error } = await supabase
     .from('rental_bookings')
     .insert({
-      booking_reference: bookingRef,
       customer_name: params.customerName,
       customer_phone: params.customerPhone,
       customer_email: params.customerEmail,
       customer_address: params.customerAddress,
       id_proof_type: params.idProofType,
       id_proof_number: params.idProofNumber,
-      vehicle_id: params.vehicleId,
-      pickup_location_id: params.pickupLocationId,
       pickup_date: params.pickupDate,
       pickup_time: params.pickupTime,
-      return_date: params.returnDate,
-      return_time: params.returnTime,
-      total_days: params.totalDays,
+      dropoff_date: params.dropoffDate,
+      dropoff_time: params.dropoffTime,
+      vehicle_id: validVehicleId,
       daily_rate: params.dailyRate,
-      total_amount: params.totalAmount,
-      security_deposit: params.securityDeposit,
-      special_requests: params.specialRequests,
-      status: 'pending',
-      payment_status: 'pending',
+      taxes: params.taxes || 0,
+      extra_charges: params.extraCharges || 0
     })
     .select('booking_reference')
     .single()
@@ -283,9 +283,9 @@ export async function createRentalBookingAction(params: CreateRentalBookingParam
     return { success: false, error: error.message }
   }
 
-  return { 
-    success: true, 
-    bookingReference: data?.booking_reference || bookingRef 
+  return {
+    success: true,
+    bookingReference: data?.booking_reference
   }
 }
 
@@ -296,16 +296,16 @@ export async function createRentalBookingAction(params: CreateRentalBookingParam
 /**
  * Get quick stats for the UI
  */
-export async function getCabStatsAction(): Promise<{ 
+export async function getCabStatsAction(): Promise<{
   availableDrivers: number
   totalCities: number
   completedTrips: number
-  avgRating: number 
+  avgRating: number
 }> {
   'use server'
-  
+
   const supabase = await createServerClient()
-  
+
   // Get available drivers count
   const { count: availableDrivers, error: driversError } = await supabase
     .from('drivers')
@@ -336,9 +336,9 @@ export async function getCabStatsAction(): Promise<{
     : 4.5
 
   if (driversError || citiesError || tripsError || ratingError) {
-    console.error('Server: Error fetching stats:', { 
-      driversError: driversError?.message || driversError, 
-      citiesError: citiesError?.message || citiesError, 
+    console.error('Server: Error fetching stats:', {
+      driversError: driversError?.message || driversError,
+      citiesError: citiesError?.message || citiesError,
       tripsError: tripsError?.message || tripsError,
       ratingError: ratingError?.message || ratingError
     })

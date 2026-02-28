@@ -323,6 +323,11 @@ CREATE POLICY "Users can view own bookings"
     ON rental_bookings FOR SELECT
     USING (customer_phone = current_setting('app.current_user_phone', true));
 
+-- Allow anonymous users to create bookings
+CREATE POLICY "Anyone can insert rental bookings"
+    ON rental_bookings FOR INSERT
+    TO PUBLIC WITH CHECK (true);
+
 -- ============================================================================
 -- DUMMY DATA: Rental Vehicles
 -- ============================================================================
